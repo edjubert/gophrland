@@ -1,0 +1,14 @@
+plugins:
+  - "scratchpads"
+  - "expose"
+
+options:
+  scratchpads:
+    - term:
+        command: "alacritty -T gophrland-alacritty"
+        animation: "fromTop"
+        unfocus: "hide"
+    - volume:
+        command: "pavucontrol"
+        animation: "fromRight"
+        unfocus: "hide"
