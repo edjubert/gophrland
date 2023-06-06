@@ -22,7 +22,7 @@ func ApplyConfig(config Config) {
 			fmt.Printf(msgTemplate, plugin)
 			expose.LoadPlugin(config.Options.Expose)
 		default:
-			fmt.Printf("[WARNING] - plugin '%s' is not implemented yet\n", plugin)
+			fmt.Printf("[WARN] - plugin '%s' is not implemented yet\n", plugin)
 		}
 	}
 }
