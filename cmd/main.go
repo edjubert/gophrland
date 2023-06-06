@@ -2,13 +2,15 @@
 package main
 
 import (
-	"fmt"
-	"gophrland/cmd/internal/server"
+	"gophrland/cmd/client"
+	"gophrland/cmd/server"
+	"os"
 )
 
 func main() {
-	server.ReadConfig(server.DEFAULT_CONFIG)
-
-	fmt.Println("Server Running...")
-	server.Handle()
+	if len(os.Args) == 1 {
+		server.Handle()
+	} else {
+		client.Handle()
+	}
 }

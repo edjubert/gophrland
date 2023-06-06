@@ -1,6 +1,7 @@
 plugins:
   - "scratchpads"
   - "expose"
+  - "pouet"
 
 options:
   scratchpads:
