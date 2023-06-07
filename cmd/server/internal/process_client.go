@@ -2,10 +2,27 @@ package internal
 
 import (
 	"fmt"
+	"gophrland/cmd/server/cmd/config"
+	"gophrland/cmd/server/cmd/plugins/scratchpads"
 	"net"
+	"strings"
 )
 
-func ProcessClient(connection net.Conn) {
+func callCommand(command string) error {
+	fields := strings.Fields(command)
+	plugin := fields[0]
+	cmd := fields[1]
+	args := fields[2:]
+
+	switch plugin {
+	case config.SCRATCHPADS:
+		return scratchpads.Command(cmd, args)
+	default:
+		return fmt.Errorf("%s is not a recognized command\n", plugin)
+	}
+}
+
+func ProcessClient(connection net.Conn, loadedConf config.Config) {
 	defer closeConnection(connection)
 
 	buffer := make([]byte, 1024)
@@ -16,9 +33,11 @@ func ProcessClient(connection net.Conn) {
 		}
 		return
 	}
+	if err := callCommand(string(buffer[:mLen])); err != nil {
+		fmt.Printf("%v\n", err)
+	}
 
-	fmt.Println("Received: ", string(buffer[:mLen]))
-	if _, err := connection.Write([]byte("Thanks! Got your message:" + string(buffer[:mLen]))); err != nil {
+	if _, err := connection.Write([]byte("ok")); err != nil {
 		fmt.Printf("Error writing response: %v\n", err)
 		return
 	}

@@ -1,12 +1,8 @@
 package client
 
 import (
-	"gophrland/cmd/client/pkg/plugins/scratchpads"
-	"log"
+	"gophrland/cmd/client/cmd"
 	"net"
-	"os"
-
-	"github.com/urfave/cli/v2"
 )
 
 const (
@@ -25,23 +21,9 @@ func startConnection() net.Conn {
 	return connection
 }
 
-func startApp(conn net.Conn) {
-	app := &cli.App{
-		Name:  "boom",
-		Usage: "make an explosion",
-		Commands: []*cli.Command{
-			scratchpads.GetApp(conn),
-		},
-	}
-
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
-}
-
 func Handle() {
 	connection := startConnection()
-	startApp(connection)
+	cmd.InitRootCmd(connection)
 
 	if err := connection.Close(); err != nil {
 		panic(err)

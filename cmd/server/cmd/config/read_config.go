@@ -9,8 +9,8 @@ import (
 )
 
 type Options struct {
-	Scratchpads []map[string]scratchpads.Scratchpad `yaml:"scratchpads"`
-	Expose      []map[string]expose.Expose          `yaml:"expose"`
+	Scratchpads []map[string]scratchpads.ScratchpadOptions `yaml:"scratchpads"`
+	Expose      []map[string]expose.Expose                 `yaml:"expose"`
 }
 
 type Config struct {

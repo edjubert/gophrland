@@ -26,6 +26,6 @@ func Handle() {
 			os.Exit(1)
 		}
 
-		go internal.ProcessClient(connection)
+		go internal.ProcessClient(connection, loadedConf)
 	}
 }

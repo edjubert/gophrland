@@ -6,10 +6,27 @@ plugins:
 options:
   scratchpads:
     - term:
-        command: "alacritty -T gophrland-alacritty"
+        command: "alacritty --class gophrland-alacritty"
         animation: "fromTop"
         unfocus: "hide"
+        margin: 60
+
     - volume:
-        command: "pavucontrol"
+        command: "alacritty --class pulsemixer-alacritty -e pulsemixer"
         animation: "fromRight"
         unfocus: "hide"
+        margin: 50
+
+    - slack:
+        command: "slack"
+        animation: "fromBottom"
+        unfocus: "hide"
+        class: "Slack"
+        margin: 60
+
+    - whatsdesk:
+        command: "whatsdesk"
+        animation: "fromBottom"
+        unfocus: "hide"
+        class: "whatsdesk"
+        margin: 40

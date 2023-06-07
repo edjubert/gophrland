@@ -6,19 +6,23 @@ import (
 	"net"
 )
 
-func GetApp(conn net.Conn) *cli.Command {
+func GetScratchpadsCommands(conn net.Conn) *cli.Command {
 	return &cli.Command{
-		Name:      "doo",
-		Aliases:   []string{"do"},
-		Category:  "motion",
-		ArgsUsage: "[arrgh]",
+		Name:      "scratchpads",
+		Category:  "scratchpads",
+		ArgsUsage: "[action]",
 		Subcommands: []*cli.Command{
 			{
-				Name: "wop",
+				Name:      "toggle",
+				Category:  "action",
+				ArgsUsage: "[name]",
 				Action: func(context *cli.Context) error {
-					fmt.Println("wop")
+					args := context.Args()
 
-					if _, err := conn.Write([]byte("Hello Server! Greetings.")); err != nil {
+					if args.Len() > 1 {
+						return fmt.Errorf("only 1 arg is necessary")
+					}
+					if _, err := conn.Write([]byte(fmt.Sprintf("scratchpads toggle %s", args.Get(0)))); err != nil {
 						panic(err)
 					}
 

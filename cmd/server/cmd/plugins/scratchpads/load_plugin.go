@@ -7,13 +7,22 @@ import (
 	"strings"
 )
 
-type Scratchpad struct {
+type ScratchpadOptions struct {
 	Command   string `yaml:"command"`
-	Animation string `yaml:"animation"`
-	Unfocus   string `yaml:"unfocus"`
+	Animation string `yaml:"animation,omitempty"`
+	Unfocus   string `yaml:"unfocus,omitempty"`
+	Margin    int    `yaml:"margin,omitempty"`
+	Class     string `yaml:"class,omitempty"`
 }
 
-func LoadPlugin(options []map[string]Scratchpad) {
+type Scratchpad struct {
+	Pid     int
+	Options ScratchpadOptions
+}
+
+var byName = make(map[string]Scratchpad)
+
+func LoadPlugin(options []map[string]ScratchpadOptions) error {
 	if len(options) > 0 {
 		for _, scratchpad := range options {
 			for name, option := range scratchpad {
@@ -28,18 +37,47 @@ func LoadPlugin(options []map[string]Scratchpad) {
 
 					value := ref.Field(field.Index[0])
 					if field.Type.String() == "string" && field.Name == "Command" {
-						values := strings.Fields(value.String())
+						clientExists := false
 
-						cmd := exec.Command(values[0], values[1:]...)
-						if err := cmd.Start(); err != nil {
-							fmt.Printf("[ERROR] - Could not start '%s' -> %v\n", field.Name, err)
+						fmt.Println("Option Class", option.Class)
+						if option.Class != "" {
+							clients, err := getClients()
+							if err != nil {
+								return err
+							}
+
+							for _, client := range clients {
+								if client.InitialClass == option.Class && !clientExists {
+									clientExists = true
+									byName[name] = Scratchpad{
+										Pid:     client.Pid,
+										Options: option,
+									}
+								}
+							}
 						}
 
-						pid := cmd.Process.Pid
-						fmt.Println("[INFO] - New PID -> ", pid)
+						fmt.Println("clientExists", clientExists)
+						if !clientExists {
+							values := strings.Fields(value.String())
+							cmd := exec.Command(values[0], values[1:]...)
+							if err := cmd.Start(); err != nil {
+								return fmt.Errorf("[ERROR] - Could not start '%s' -> %w\n", field.Name, err)
+							}
+
+							pid := cmd.Process.Pid
+							fmt.Printf("[INFO] - New PID '%s' -> %d\n", name, pid)
+							byName[name] = Scratchpad{
+								Pid:     pid,
+								Options: option,
+							}
+						}
+
+						fmt.Println("byName ->", byName[name])
 					}
 				}
 			}
 		}
 	}
+	return nil
 }
