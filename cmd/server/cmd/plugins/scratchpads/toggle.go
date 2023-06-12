@@ -47,6 +47,16 @@ func getClientByPID(clients []IPC.HyprlandClient, pid int) (IPC.HyprlandClient, 
 	return IPC.HyprlandClient{}, fmt.Errorf("could not found client")
 }
 
+func getClientByClassName(clients []IPC.HyprlandClient, class string) (IPC.HyprlandClient, error) {
+	for _, client := range clients {
+		if client.Class == class {
+			return client, nil
+		}
+	}
+
+	return IPC.HyprlandClient{}, fmt.Errorf("could not found client")
+}
+
 func getMonitors() ([]IPC.HyprlandMonitor, error) {
 	monitorsJSON, err := exec.Command("hyprctl", "monitors", "-j").Output()
 	if err != nil {
@@ -70,18 +80,51 @@ func getActiveMonitor(monitors []IPC.HyprlandMonitor) (IPC.HyprlandMonitor, erro
 
 	return IPC.HyprlandMonitor{}, fmt.Errorf("not found")
 }
-func toggle(args []string) error {
+
+func getOption(scratchpadName string, options []map[string]ScratchpadOptions) ScratchpadOptions {
+	for _, scratchpad := range options {
+		for name, option := range scratchpad {
+			if scratchpadName == name {
+				return option
+			}
+		}
+	}
+
+	return ScratchpadOptions{}
+}
+
+func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error {
+	fmt.Println("[INFO] Updating scratchpad")
+	clients, err := getClients()
+	if err != nil {
+		return err
+	}
+	client, err := getClientByClassName(clients, options.Class)
+	*scratchpad = Scratchpad{
+		Pid:     client.Pid,
+		Options: options,
+	}
+
+	return nil
+}
+
+func toggle(args []string, options []map[string]ScratchpadOptions) error {
 	if len(args) > 1 {
 		return fmt.Errorf("to many arguments\n")
 	}
 
+	option := getOption(args[0], options)
+
 	scratchpad := byName[args[0]]
 	if scratchpad.Pid == 0 {
-		return fmt.Errorf("could not find scratchpad for %s\n", args[0])
-	}
+		if option.Class == "" {
+			return fmt.Errorf("could not find scratchpad for %s\n", args[0])
+		}
 
-	fmt.Printf("Toggle: %s\tScratch found: %v\n", args[0], scratchpad)
-	fmt.Printf("byName: %v\n", byName)
+		if err := scratchpad.updateScratchpad(option); err != nil {
+			return err
+		}
+	}
 
 	monitors, err := getMonitors()
 	if err != nil {
@@ -92,13 +135,6 @@ func toggle(args []string) error {
 	if err != nil {
 		return err
 	}
-	activeClient, err := getActiveClient()
-	if err != nil {
-		return err
-	}
-
-	workspace := activeMonitor.ActiveWorkspace.Id
-	fmt.Println("activeClient", activeClient, workspace, activeMonitor.Id)
 
 	clients, err := getClients()
 	if err != nil {
@@ -112,8 +148,6 @@ func toggle(args []string) error {
 		Margin:    scratchpad.Options.Margin,
 		Animation: scratchpad.Options.Animation,
 	}
-
-	fmt.Println("opts", opts, client.Workspace.Id)
 
 	if client.Workspace.Id < 0 {
 		if err := showClient(client, activeMonitor, opts); err != nil {
@@ -154,5 +188,5 @@ func hideClient(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, animatio
 
 	fmt.Println("hide client")
 	time.Sleep(time.Millisecond * 200)
-	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("special,address:%s", client.Address)).Run()
+	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("special:scratchpads,address:%s", client.Address)).Run()
 }

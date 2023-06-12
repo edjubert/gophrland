@@ -10,10 +10,10 @@ const (
 	HIDE   = "hide"
 )
 
-func Command(cmd string, args []string) error {
+func Command(cmd string, args []string, opts []map[string]ScratchpadOptions) error {
 	switch cmd {
 	case TOGGLE:
-		return toggle(args)
+		return toggle(args, opts)
 	case SHOW, HIDE:
 		return fmt.Errorf("not (yet) implemented")
 	default:

@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func callCommand(command string) error {
+func callCommand(command string, opts []map[string]scratchpads.ScratchpadOptions) error {
 	fields := strings.Fields(command)
 	plugin := fields[0]
 	cmd := fields[1]
@@ -16,7 +16,7 @@ func callCommand(command string) error {
 
 	switch plugin {
 	case config.SCRATCHPADS:
-		return scratchpads.Command(cmd, args)
+		return scratchpads.Command(cmd, args, opts)
 	default:
 		return fmt.Errorf("%s is not a recognized command\n", plugin)
 	}
@@ -33,7 +33,7 @@ func ProcessClient(connection net.Conn, loadedConf config.Config) {
 		}
 		return
 	}
-	if err := callCommand(string(buffer[:mLen])); err != nil {
+	if err := callCommand(string(buffer[:mLen]), loadedConf.Options.Scratchpads); err != nil {
 		fmt.Printf("%v\n", err)
 	}
 

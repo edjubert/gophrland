@@ -2,6 +2,7 @@ package scratchpads
 
 import (
 	"fmt"
+	cmd2 "gophrland/cmd/server/cmd/plugins/scratchpads/cmd"
 	"os/exec"
 	"reflect"
 	"strings"
@@ -37,28 +38,7 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 
 					value := ref.Field(field.Index[0])
 					if field.Type.String() == "string" && field.Name == "Command" {
-						clientExists := false
-
-						fmt.Println("Option Class", option.Class)
-						if option.Class != "" {
-							clients, err := getClients()
-							if err != nil {
-								return err
-							}
-
-							for _, client := range clients {
-								if client.InitialClass == option.Class && !clientExists {
-									clientExists = true
-									byName[name] = Scratchpad{
-										Pid:     client.Pid,
-										Options: option,
-									}
-								}
-							}
-						}
-
-						fmt.Println("clientExists", clientExists)
-						if !clientExists {
+						if option.Class == "" {
 							values := strings.Fields(value.String())
 							cmd := exec.Command(values[0], values[1:]...)
 							if err := cmd.Start(); err != nil {
@@ -66,14 +46,30 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 							}
 
 							pid := cmd.Process.Pid
-							fmt.Printf("[INFO] - New PID '%s' -> %d\n", name, pid)
+
+							clients, err := getClients()
+							if err != nil {
+							}
+							client, err := getClientByPID(clients, pid)
+							if err != nil {
+							}
+
+							monitors, err := getMonitors()
+							monitor, err := getActiveMonitor(monitors)
+
+							opts := cmd2.AnimationsOptions{
+								Margin:    option.Margin,
+								Animation: option.Animation,
+							}
+							if err := cmd2.ToAnimation(client, monitor, opts); err != nil {
+
+							}
+
 							byName[name] = Scratchpad{
 								Pid:     pid,
 								Options: option,
 							}
 						}
-
-						fmt.Println("byName ->", byName[name])
 					}
 				}
 			}
