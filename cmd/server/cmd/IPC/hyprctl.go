@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+const SCRATCHPADS_SPECIAL_WORKSPACE = "scratchpads_special_workspace"
+
 func GetActiveClient() (HyprlandClient, error) {
 	clientJSON, err := exec.Command("hyprctl", "activewindow", "-j").Output()
 	if err != nil {
@@ -100,5 +102,5 @@ func MoveToWorkspaceSilent(name, address string) error {
 	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("%s,address:%s", name, address)).Run()
 }
 func MoveToSpecialNamed(address string) error {
-	return MoveToWorkspaceSilent("special:scratchpads", address)
+	return MoveToWorkspaceSilent("special:"+SCRATCHPADS_SPECIAL_WORKSPACE, address)
 }
