@@ -12,15 +12,15 @@ const (
 )
 
 func ApplyConfig(config Config) {
-	msgTemplate := "[INFO] - Loading plugin '%s'\n"
 	for _, plugin := range config.Plugins {
 		switch plugin {
 		case SCRATCHPADS:
-			fmt.Printf(msgTemplate, plugin)
-			scratchpads.LoadPlugin(config.Options.Scratchpads)
+			if err := scratchpads.LoadPlugin(config.Options.Scratchpads); err != nil {
+				fmt.Printf("[ERROR] - loading plugin %s", plugin)
+				return
+			}
 		case EXPOSE:
-			fmt.Printf(msgTemplate, plugin)
-			expose.LoadPlugin(config.Options.Expose)
+			expose.LoadPlugin()
 		default:
 			fmt.Printf("[WARN] - plugin '%s' is not implemented yet\n", plugin)
 		}

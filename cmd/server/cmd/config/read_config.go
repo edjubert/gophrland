@@ -10,7 +10,7 @@ import (
 
 type Options struct {
 	Scratchpads []map[string]scratchpads.ScratchpadOptions `yaml:"scratchpads"`
-	Expose      []map[string]expose.Expose                 `yaml:"expose"`
+	Expose      expose.ExposeOptions                       `yaml:"expose"`
 }
 
 type Config struct {

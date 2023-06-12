@@ -3,20 +3,29 @@ package internal
 import (
 	"fmt"
 	"gophrland/cmd/server/cmd/config"
+	"gophrland/cmd/server/cmd/plugins/expose"
 	"gophrland/cmd/server/cmd/plugins/scratchpads"
 	"net"
 	"strings"
 )
 
-func callCommand(command string, opts []map[string]scratchpads.ScratchpadOptions) error {
+func callCommand(command string, opts config.Options) error {
 	fields := strings.Fields(command)
 	plugin := fields[0]
-	cmd := fields[1]
-	args := fields[2:]
+
+	fmt.Println("len: ", len(fields), fields[1:])
 
 	switch plugin {
 	case config.SCRATCHPADS:
-		return scratchpads.Command(cmd, args, opts)
+		cmd := fields[1]
+		args := fields[2:]
+		return scratchpads.Command(cmd, args, opts.Scratchpads)
+	case config.EXPOSE:
+		cmd := ""
+		if len(fields[1:]) > 0 {
+			cmd = fields[1]
+		}
+		return expose.Command(cmd, opts.Expose)
 	default:
 		return fmt.Errorf("%s is not a recognized command\n", plugin)
 	}
@@ -33,7 +42,7 @@ func ProcessClient(connection net.Conn, loadedConf config.Config) {
 		}
 		return
 	}
-	if err := callCommand(string(buffer[:mLen]), loadedConf.Options.Scratchpads); err != nil {
+	if err := callCommand(string(buffer[:mLen]), loadedConf.Options); err != nil {
 		fmt.Printf("%v\n", err)
 	}
 

@@ -18,11 +18,9 @@ func Handle() {
 	defer internal.CloseServer(server)
 
 	loadedConf := config.ReadConfig(DEFAULT_CONFIG)
-	fmt.Println("loaded conf: ", loadedConf)
 	config.ApplyConfig(loadedConf)
 
 	hyprlandSignature := os.Getenv(HYPRLAND_INSTANCE_SIGNATURE)
-	fmt.Println("signature: ", hyprlandSignature)
 	go IPC.ConnectEvents(hyprlandSignature)
 	//_, err := IPC.ConnectHyprctl(hyprlandSignature)
 	//if err != nil {

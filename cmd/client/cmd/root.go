@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli/v2"
+	"gophrland/cmd/client/pkg/plugins/expose"
 	"gophrland/cmd/client/pkg/plugins/scratchpads"
 	"log"
 	"net"
@@ -14,6 +15,7 @@ func InitRootCmd(conn net.Conn) {
 		Usage: "Client and daemon to manage hyprland plugins",
 		Commands: []*cli.Command{
 			scratchpads.GetScratchpadsCommands(conn),
+			expose.GetExposeCommands(conn),
 		},
 	}
 

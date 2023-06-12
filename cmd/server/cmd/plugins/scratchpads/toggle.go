@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+const SCRATCHPADS_SPECIAL_WORKSPACE = "scratchpads_special_workspace"
+
 func getOption(scratchpadName string, options []map[string]ScratchpadOptions) ScratchpadOptions {
 	for _, scratchpad := range options {
 		for name, option := range scratchpad {
@@ -92,7 +94,7 @@ func showClient(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, animatio
 		return err
 	}
 
-	if err := IPC.MoveToCurrent(monitor.ActiveWorkspace.Id, client.Address); err != nil {
+	if err := IPC.MoveToWorkspaceID(monitor.ActiveWorkspace.Id, client.Address); err != nil {
 		return err
 	}
 	if err := IPC.FocusWindow(client.Address); err != nil {
@@ -109,5 +111,5 @@ func hideClient(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, animatio
 	}
 
 	time.Sleep(time.Millisecond * 200)
-	return IPC.MoveToSpecialNamed(client.Address)
+	return IPC.MoveToSpecialNamed(SCRATCHPADS_SPECIAL_WORKSPACE, client.Address)
 }

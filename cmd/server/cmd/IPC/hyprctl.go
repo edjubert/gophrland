@@ -7,8 +7,6 @@ import (
 	"strconv"
 )
 
-const SCRATCHPADS_SPECIAL_WORKSPACE = "scratchpads_special_workspace"
-
 func GetActiveClient() (HyprlandClient, error) {
 	clientJSON, err := exec.Command("hyprctl", "activewindow", "-j").Output()
 	if err != nil {
@@ -91,7 +89,30 @@ func MoveWindowPixelExact(x, y int, address string) error {
 		Run()
 }
 
-func MoveToCurrent(currentWorkspaceID int, address string) error {
+func ToggleSpecialWorkspace(name string) error {
+	fmt.Println("hyprctl", "dispatch", "togglespecialworkspace", name)
+	return exec.Command("hyprctl", "dispatch", "togglespecialworkspace", name).Run()
+}
+
+func MoveToCurrent(address string) error {
+	monitors, err := Monitors("-j")
+	if err != nil {
+		return err
+	}
+
+	monitor, err := ActiveMonitor(monitors)
+	if err != nil {
+		return err
+	}
+
+	if err := MoveToWorkspaceID(monitor.ActiveWorkspace.Id, address); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func MoveToWorkspaceID(currentWorkspaceID int, address string) error {
 	return MoveToWorkspaceSilent(strconv.Itoa(currentWorkspaceID), address)
 }
 func FocusWindow(address string) error {
@@ -101,6 +122,9 @@ func FocusWindow(address string) error {
 func MoveToWorkspaceSilent(name, address string) error {
 	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("%s,address:%s", name, address)).Run()
 }
-func MoveToSpecialNamed(address string) error {
-	return MoveToWorkspaceSilent("special:"+SCRATCHPADS_SPECIAL_WORKSPACE, address)
+func MoveToSpecialNamed(specialName, address string) error {
+	if specialName != "" {
+		specialName = fmt.Sprintf(":%s", specialName)
+	}
+	return MoveToWorkspaceSilent("special"+specialName, address)
 }
