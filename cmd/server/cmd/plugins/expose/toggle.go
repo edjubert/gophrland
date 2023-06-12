@@ -1,10 +1,12 @@
 package expose
 
-import (
-	"gophrland/cmd/server/cmd/IPC"
-)
+import "gophrland/cmd/server/cmd/IPC"
 
 func toggle(options ExposeOptions) error {
+	name := EXPOSED_SPECIAL_WORKSPACE
+	if options.Name != "" {
+		name = options.Name
+	}
 	client, err := IPC.GetActiveClient()
 	if err != nil {
 		return err
@@ -15,11 +17,7 @@ func toggle(options ExposeOptions) error {
 			return err
 		}
 	} else {
-		if err := IPC.MoveToSpecialNamed(EXPOSED_SPECIAL_WORKSPACE, client.Address); err != nil {
-			return err
-		}
-
-		if err := IPC.FocusWindow(client.Address); err != nil {
+		if err := IPC.MoveToSpecialNamed(name, client.Address); err != nil {
 			return err
 		}
 	}

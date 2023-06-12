@@ -11,6 +11,7 @@ const (
 	FROM_RIGHT     = "fromRight"
 	FROM_TOP       = "fromTop"
 	FROM_BOTTOM    = "fromBottom"
+	NO_ANIMATION   = ""
 )
 
 type AnimationsOptions struct {
@@ -26,7 +27,7 @@ func FromAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, optio
 		return fromRight(client, monitor, options.Margin)
 	case FROM_TOP:
 		return fromTop(client, monitor, options.Margin)
-	case FROM_BOTTOM:
+	case FROM_BOTTOM, NO_ANIMATION:
 		return fromBottom(client, monitor, options.Margin)
 	default:
 		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
@@ -46,6 +47,8 @@ func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options
 		return toTop(client, monitor)
 	case FROM_BOTTOM:
 		return toBottom(client, monitor)
+	case NO_ANIMATION:
+		return nil
 	default:
 		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
 	}
