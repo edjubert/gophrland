@@ -15,8 +15,8 @@ func Command(cmd string, args []string, opts []map[string]ScratchpadOptions) err
 	case TOGGLE:
 		return toggle(args, opts)
 	case SHOW, HIDE:
-		return fmt.Errorf("not (yet) implemented")
+		return fmt.Errorf("[ERROR] - not (yet) implemented")
 	default:
-		return fmt.Errorf("unrecognized command")
+		return fmt.Errorf("[WARN] - unrecognized command")
 	}
 }

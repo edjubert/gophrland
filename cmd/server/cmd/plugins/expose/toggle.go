@@ -1,6 +1,8 @@
 package expose
 
-import "gophrland/cmd/server/cmd/IPC"
+import (
+	"gophrland/cmd/server/cmd/IPC"
+)
 
 func toggle(options ExposeOptions) error {
 	client, err := IPC.GetActiveClient()

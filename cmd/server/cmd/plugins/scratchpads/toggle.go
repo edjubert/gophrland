@@ -38,7 +38,7 @@ func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error 
 
 func toggle(args []string, options []map[string]ScratchpadOptions) error {
 	if len(args) > 1 {
-		return fmt.Errorf("to many arguments\n")
+		return fmt.Errorf("[ERROR] - to many arguments\n")
 	}
 
 	option := getOption(args[0], options)
@@ -46,7 +46,7 @@ func toggle(args []string, options []map[string]ScratchpadOptions) error {
 	scratchpad := byName[args[0]]
 	if scratchpad.Pid == 0 {
 		if option.Class == "" {
-			return fmt.Errorf("could not find scratchpad for %s\n", args[0])
+			return fmt.Errorf("[ERROR] - could not find scratchpad for %s\n", args[0])
 		}
 
 		if err := scratchpad.updateScratchpad(option); err != nil {
@@ -70,7 +70,6 @@ func toggle(args []string, options []map[string]ScratchpadOptions) error {
 	}
 
 	client, err := IPC.GetClientByPID(clients, scratchpad.Pid)
-	fmt.Printf("Found the client: %d\n%v\n", scratchpad.Pid, client)
 
 	opts := cmd.AnimationsOptions{
 		Margin:    scratchpad.Options.Margin,

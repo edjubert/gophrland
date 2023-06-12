@@ -42,7 +42,7 @@ func GetClientByPID(clients []HyprlandClient, pid int) (HyprlandClient, error) {
 		}
 	}
 
-	return HyprlandClient{}, fmt.Errorf("could not found client")
+	return HyprlandClient{}, fmt.Errorf("[ERROR] - could not found client")
 }
 
 func GetClientByClassName(clients []HyprlandClient, class string) (HyprlandClient, error) {
@@ -52,12 +52,12 @@ func GetClientByClassName(clients []HyprlandClient, class string) (HyprlandClien
 		}
 	}
 
-	return HyprlandClient{}, fmt.Errorf("could not found client")
+	return HyprlandClient{}, fmt.Errorf("[ERROR] - could not found client")
 }
 
 func Monitors(format string) ([]HyprlandMonitor, error) {
 	if format != "" && format != "-j" {
-		return nil, fmt.Errorf("wrong monitor formats")
+		return nil, fmt.Errorf("[ERROR] - wrong monitor formats")
 	}
 
 	monitorsJSON, err := exec.Command("hyprctl", "monitors", format).Output()
@@ -80,7 +80,7 @@ func ActiveMonitor(monitors []HyprlandMonitor) (HyprlandMonitor, error) {
 		}
 	}
 
-	return HyprlandMonitor{}, fmt.Errorf("not found")
+	return HyprlandMonitor{}, fmt.Errorf("[ERROR] - not found")
 }
 
 func MoveWindowPixelExact(x, y int, address string) error {
@@ -90,7 +90,6 @@ func MoveWindowPixelExact(x, y int, address string) error {
 }
 
 func ToggleSpecialWorkspace(name string) error {
-	fmt.Println("hyprctl", "dispatch", "togglespecialworkspace", name)
 	return exec.Command("hyprctl", "dispatch", "togglespecialworkspace", name).Run()
 }
 
@@ -112,6 +111,10 @@ func MoveToCurrent(address string) error {
 	return nil
 }
 
+func FocusCurrentWorkspace(currentWorkspaceId int) error {
+	return exec.Command("hyprctl", "dispatch", "workspace", strconv.Itoa(currentWorkspaceId)).Run()
+}
+
 func MoveToWorkspaceID(currentWorkspaceID int, address string) error {
 	return MoveToWorkspaceSilent(strconv.Itoa(currentWorkspaceID), address)
 }
@@ -121,6 +124,21 @@ func FocusWindow(address string) error {
 
 func MoveToWorkspaceSilent(name, address string) error {
 	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("%s,address:%s", name, address)).Run()
+}
+
+func GetWorkspaces() ([]HyprlandWorkspace, error) {
+	ret, err := exec.Command("hyprctl", "workspaces", "-j").Output()
+	if err != nil {
+		return nil, err
+	}
+
+	var workspaces []HyprlandWorkspace
+	if err := json.Unmarshal(ret, &workspaces); err != nil {
+		return nil, err
+	}
+
+	fmt.Println(workspaces)
+	return workspaces, nil
 }
 func MoveToSpecialNamed(specialName, address string) error {
 	if specialName != "" {

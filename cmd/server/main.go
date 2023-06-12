@@ -9,10 +9,10 @@ import (
 	"gophrland/cmd/server/internal"
 )
 
-const DEFAULT_CONFIG = "./config.yaml"
+const DEFAULT_CONFIG = "/home/edouard.jubert.ext/.config/hypr/gophrland.yaml"
 const HYPRLAND_INSTANCE_SIGNATURE = "HYPRLAND_INSTANCE_SIGNATURE"
 
-func Handle() {
+func New() {
 
 	server := internal.CreateServer()
 	defer internal.CloseServer(server)
@@ -27,11 +27,11 @@ func Handle() {
 	//	fmt.Println("[ERROR] - Could not open hyprctl socket", err)
 	//}
 
-	fmt.Println("Waiting for client...")
+	fmt.Println("[INFO] - Waiting for client...")
 	for {
 		connection, err := server.Accept()
 		if err != nil {
-			fmt.Println("Error accepting: ", err.Error())
+			fmt.Println("[ERROR] - Error accepting: ", err.Error())
 			os.Exit(1)
 		}
 

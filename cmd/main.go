@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) == 1 {
-		server.Handle()
+		server.New()
 	} else {
 		client.Handle()
 	}

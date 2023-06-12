@@ -1,8 +1,9 @@
 package IPC
 
 type HyprlandWorkspace struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id      int    `json:"id"`
+	Windows int    `json:"windows"`
+	Name    string `json:"name"`
 }
 
 type HyprlandMonitor struct {

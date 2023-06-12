@@ -16,7 +16,6 @@ type Echo struct {
 
 func Write(c net.Conn, msg string) error {
 	length := len(msg)
-	fmt.Println("msg len", length)
 	data := make([]byte, 0, 4+length)
 
 	buf := make([]byte, 4)
@@ -61,13 +60,11 @@ func Read(c net.Conn) (string, error) {
 func handleMessage(msg string) {
 	m := strings.Split(msg, ">>")
 	if len(m) < 1 {
-		fmt.Println("Not enough args")
+		fmt.Println("[WARN] - Not enough args")
 		return
 	}
-	cmd := m[0]
-	arg := m[1]
-
-	fmt.Printf("CMD: %s\tARG: %s\n", cmd, arg)
+	//cmd := m[0]
+	//arg := m[1]
 }
 func ConnectHyprctl(signature string) (net.Conn, error) {
 	hyprctl := "/tmp/hypr/" + signature + "/.socket.sock"
@@ -95,14 +92,12 @@ func ConnectHyprctl(signature string) (net.Conn, error) {
 		fmt.Println("[INFO]: ", msg)
 	}
 
-	//
-	//return conn, nil
 	return nil, nil
 }
 
 func closeConn(conn net.Conn) {
 	if err := conn.Close(); err != nil {
-		fmt.Printf("Could not close connection -> %v", err)
+		fmt.Printf("[ERROR] - Could not close connection -> %v", err)
 	}
 }
 

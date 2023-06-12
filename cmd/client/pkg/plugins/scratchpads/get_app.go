@@ -20,20 +20,19 @@ func GetScratchpadsCommands(conn net.Conn) *cli.Command {
 					args := context.Args()
 
 					if args.Len() > 1 {
-						return fmt.Errorf("only 1 arg is necessary")
+						return fmt.Errorf("[ERROR] - only 1 arg is necessary")
 					}
 					if _, err := conn.Write([]byte(fmt.Sprintf("scratchpads toggle %s", args.Get(0)))); err != nil {
 						panic(err)
 					}
 
 					buffer := make([]byte, 1024)
-					mLen, err := conn.Read(buffer)
+					_, err := conn.Read(buffer)
 					if err != nil {
-						fmt.Println("Error reading:", err.Error())
+						fmt.Println("[ERROR] - Error reading:", err.Error())
 						panic(err)
 					}
 
-					fmt.Println("Received: ", string(buffer[:mLen]))
 					return nil
 				},
 			},

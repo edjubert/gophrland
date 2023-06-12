@@ -21,12 +21,12 @@ type Config struct {
 func ReadConfig(file string) Config {
 	dat, err := os.ReadFile(file)
 	if err != nil {
-		fmt.Printf("Could not read file '%s' -> %v\n", file, err)
+		fmt.Printf("[ERROR] - Could not read file '%s' -> %v\n", file, err)
 	}
 
 	var config Config
 	if err := yaml.Unmarshal(dat, &config); err != nil {
-		fmt.Printf("Could not unmarshal %v\n", err)
+		fmt.Printf("[ERROR] - Could not unmarshal %v\n", err)
 	}
 
 	return config

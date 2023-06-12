@@ -14,6 +14,6 @@ func Command(cmd string, opts ExposeOptions) error {
 	case ROOT:
 		return root(opts)
 	default:
-		return fmt.Errorf("unrecognized command")
+		return fmt.Errorf("[WARN] - unrecognized command")
 	}
 }

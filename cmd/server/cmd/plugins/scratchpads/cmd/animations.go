@@ -29,12 +29,12 @@ func FromAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, optio
 	case FROM_BOTTOM:
 		return fromBottom(client, monitor, options.Margin)
 	default:
-		return fmt.Errorf("animation unrecognized (%s)", options.Animation)
+		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
 	}
 }
 func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options AnimationsOptions) error {
 	if client.Pid == 0 {
-		return fmt.Errorf("no client")
+		return fmt.Errorf("[ERROR] - no client")
 	}
 
 	switch options.Animation {
@@ -47,7 +47,7 @@ func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options
 	case FROM_BOTTOM:
 		return toBottom(client, monitor)
 	default:
-		return fmt.Errorf("animation unrecognized (%s)", options.Animation)
+		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
 	}
 }
 
@@ -70,7 +70,6 @@ func toLeft(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
 	y := monitor.Y + DEFAULT_MARGIN
 
 	err := IPC.MoveWindowPixelExact(x, y, client.Address)
-	fmt.Println("toLeft", err)
 	return err
 }
 
