@@ -2,6 +2,7 @@ package scratchpads
 
 import (
 	"fmt"
+	"gophrland/cmd/server/cmd/IPC"
 	cmd2 "gophrland/cmd/server/cmd/plugins/scratchpads/cmd"
 	"os/exec"
 	"reflect"
@@ -47,15 +48,15 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 
 							pid := cmd.Process.Pid
 
-							clients, err := getClients()
+							clients, err := IPC.GetClients()
 							if err != nil {
 							}
-							client, err := getClientByPID(clients, pid)
+							client, err := IPC.GetClientByPID(clients, pid)
 							if err != nil {
 							}
 
-							monitors, err := getMonitors()
-							monitor, err := getActiveMonitor(monitors)
+							monitors, err := IPC.Monitors("-j")
+							monitor, err := IPC.ActiveMonitor(monitors)
 
 							opts := cmd2.AnimationsOptions{
 								Margin:    option.Margin,
