@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"gophrland/cmd/server/cmd/plugins/bring_float"
 	"gophrland/cmd/server/cmd/plugins/expose"
 	"gophrland/cmd/server/cmd/plugins/scratchpads"
 )
@@ -9,6 +10,7 @@ import (
 const (
 	SCRATCHPADS = "scratchpads"
 	EXPOSE      = "expose"
+	BRING_FLOAT = "bring_float"
 )
 
 func ApplyConfig(config Config) {
@@ -21,6 +23,8 @@ func ApplyConfig(config Config) {
 			}
 		case EXPOSE:
 			expose.LoadPlugin()
+		case BRING_FLOAT:
+			bring_float.LoadPlugin()
 		default:
 			fmt.Printf("[WARN] - plugin '%s' is not implemented yet\n", plugin)
 		}

@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"gophrland/cmd/server/cmd/plugins/bring_float"
 	"gophrland/cmd/server/cmd/plugins/expose"
 	"gophrland/cmd/server/cmd/plugins/scratchpads"
 	"gopkg.in/yaml.v3"
@@ -11,6 +12,7 @@ import (
 type Options struct {
 	Scratchpads []map[string]scratchpads.ScratchpadOptions `yaml:"scratchpads"`
 	Expose      expose.ExposeOptions                       `yaml:"expose"`
+	BringFloat  bring_float.BringFloatOptions              `yaml:"bring_float"`
 }
 
 type Config struct {

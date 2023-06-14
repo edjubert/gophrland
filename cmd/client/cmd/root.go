@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli/v2"
+	"gophrland/cmd/client/pkg/plugins/bring_float"
 	"gophrland/cmd/client/pkg/plugins/expose"
 	"gophrland/cmd/client/pkg/plugins/scratchpads"
 	"log"
@@ -16,6 +17,7 @@ func InitRootCmd(conn net.Conn) {
 		Commands: []*cli.Command{
 			scratchpads.GetScratchpadsCommands(conn),
 			expose.GetExposeCommands(conn),
+			bring_float.GetBringFloatCommands(conn),
 		},
 	}
 

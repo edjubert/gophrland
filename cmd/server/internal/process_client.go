@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"gophrland/cmd/server/cmd/config"
+	"gophrland/cmd/server/cmd/plugins/bring_float"
 	"gophrland/cmd/server/cmd/plugins/expose"
 	"gophrland/cmd/server/cmd/plugins/scratchpads"
 	"net"
@@ -24,6 +25,9 @@ func callCommand(command string, opts config.Options) error {
 			cmd = fields[1]
 		}
 		return expose.Command(cmd, opts.Expose)
+	case config.BRING_FLOAT:
+		cmd := fields[1]
+		return bring_float.Command(cmd, opts.BringFloat)
 	default:
 		return fmt.Errorf("[ERROR] - %s is not a recognized command\n", plugin)
 	}
@@ -40,6 +44,7 @@ func ProcessClient(connection net.Conn, loadedConf config.Config) {
 		}
 		return
 	}
+
 	if err := callCommand(string(buffer[:mLen]), loadedConf.Options); err != nil {
 		fmt.Println(err)
 	}

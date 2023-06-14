@@ -21,7 +21,7 @@ func startConnection() net.Conn {
 	return connection
 }
 
-func Handle() {
+func New() {
 	connection := startConnection()
 	cmd.InitRootCmd(connection)
 

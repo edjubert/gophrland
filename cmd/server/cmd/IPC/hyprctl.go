@@ -3,6 +3,7 @@ package IPC
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"os/exec"
 	"strconv"
 )
@@ -19,6 +20,22 @@ func GetActiveClient() (HyprlandClient, error) {
 	}
 
 	return activewindow, nil
+}
+
+func GetWorkspaceFloatingClients(workspace HyprlandWorkspace) ([]HyprlandClient, error) {
+	clients, err := GetClients()
+	if err != nil {
+		return nil, err
+	}
+
+	var workspaceClients []HyprlandClient
+	for _, client := range clients {
+		if client.Workspace.Id == workspace.Id {
+			workspaceClients = append(workspaceClients, client)
+		}
+	}
+
+	return workspaceClients, nil
 }
 
 func GetClients() ([]HyprlandClient, error) {
@@ -93,6 +110,25 @@ func ToggleSpecialWorkspace(name string) error {
 	return exec.Command("hyprctl", "dispatch", "togglespecialworkspace", name).Run()
 }
 
+func CenterFloatingClient(client HyprlandClient, monitor HyprlandMonitor) error {
+	margin := 100
+	randFactorX := client.Size[0]
+	randFactorY := client.Size[1]
+	randX := rand.Intn(randFactorX)
+	randY := rand.Intn(randFactorY)
+	centerX := (monitor.X + monitor.Width - monitor.Width/2) - client.Size[0]/2 - randFactorX/2 + randX
+	centerY := (monitor.Y + monitor.Height - monitor.Height/2) - client.Size[1]/2 - randFactorY/2 + randY + margin
+
+	return exec.
+		Command(
+			"hyprctl",
+			"dispatch",
+			"movewindowpixel",
+			"exact",
+			fmt.Sprintf("%d %d,address:%s", centerX, centerY, client.Address)).
+		Run()
+}
+
 func MoveToCurrent(address string) error {
 	monitors, err := Monitors("-j")
 	if err != nil {
@@ -124,6 +160,15 @@ func FocusWindow(address string) error {
 
 func MoveToWorkspaceSilent(name, address string) error {
 	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("%s,address:%s", name, address)).Run()
+}
+
+func GetActiveWorkspace() (HyprlandWorkspace, error) {
+	activeClient, err := GetActiveClient()
+	if err != nil {
+		return HyprlandWorkspace{}, err
+	}
+
+	return activeClient.Workspace, nil
 }
 
 func GetWorkspaces() ([]HyprlandWorkspace, error) {

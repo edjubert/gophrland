@@ -1,8 +1,12 @@
 plugins:
   - "scratchpads"
   - "expose"
+  - "bring_float"
 
 options:
+  bring_float:
+    offset: 0.9
+
   scratchpads:
     - term:
         command: "alacritty --class gophrland-alacritty"
@@ -29,3 +33,8 @@ options:
         unfocus: "hide"
         class: "whatsdesk"
         margin: 40
+
+    # - cava:
+    #     command: "alacritty --class cava-alacritty -e cava"
+    #     animation: "fromBottom"
+    #     margin: 10
