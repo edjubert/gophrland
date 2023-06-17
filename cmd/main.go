@@ -2,15 +2,15 @@
 package main
 
 import (
-	"gophrland/cmd/client"
-	"gophrland/cmd/server"
+	cmd2 "gophrland/pkg/client/cmd"
+	"gophrland/pkg/server/cmd"
 	"os"
 )
 
 func main() {
 	if len(os.Args) == 1 {
-		server.New()
+		cmd.New()
 	} else {
-		client.New()
+		cmd2.New()
 	}
 }
