@@ -2,31 +2,20 @@ package config
 
 import (
 	"fmt"
-	"gophrland/pkg/server/pkg/plugins/bring_float"
-	"gophrland/pkg/server/pkg/plugins/expose"
-	"gophrland/pkg/server/pkg/plugins/scratchpads"
+	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	"github.com/edjubert/gophrland/plugins"
 	"gopkg.in/yaml.v3"
 	"os"
 )
 
-type Options struct {
-	Scratchpads []map[string]scratchpads.ScratchpadOptions `yaml:"scratchpads"`
-	Expose      expose.ExposeOptions                       `yaml:"expose"`
-	BringFloat  bring_float.BringFloatOptions              `yaml:"bring_float"`
-}
-
-type Config struct {
-	Plugins []string `yaml:"plugins"`
-	Options Options  `yaml:"options"`
-}
-
-func ReadConfig(file string) Config {
+func ReadConfig(file string) plugins.Config {
 	dat, err := os.ReadFile(file)
 	if err != nil {
+		_ = IPC.SendNotification(5000, "warning", fmt.Sprintf("Could not read config file '%s' -> %v\n", file, err))
 		fmt.Printf("[ERROR] - Could not read file '%s' -> %v\n", file, err)
 	}
 
-	var config Config
+	var config plugins.Config
 	if err := yaml.Unmarshal(dat, &config); err != nil {
 		fmt.Printf("[ERROR] - Could not unmarshal %v\n", err)
 	}

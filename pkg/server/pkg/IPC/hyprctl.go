@@ -100,6 +100,33 @@ func ActiveMonitor(monitors []HyprlandMonitor) (HyprlandMonitor, error) {
 	return HyprlandMonitor{}, fmt.Errorf("[ERROR] - not found")
 }
 
+func SendNotification(time int, msgType, msg string) error {
+	icon := -1
+	prefix := "[Gophrland]"
+
+	switch msgType {
+	case "warning":
+		icon = 0
+	case "info":
+		icon = 1
+	case "notice":
+		icon = 2
+	case "error":
+		icon = 3
+	case "question":
+		icon = 4
+	case "checkmark":
+		icon = 5
+	default:
+		icon = -1
+	}
+
+	fmt.Println("hyprctl", "notify", strconv.Itoa(icon), strconv.Itoa(time), "rgb(ff1ea3)", "salut")
+	return exec.
+		Command("hyprctl", "notify", strconv.Itoa(icon), strconv.Itoa(time), "rgb(ff1ea3)", fmt.Sprintf("  %s: %s", prefix, msg)).
+		Run()
+}
+
 func MoveWindowPixelExact(x, y int, address string) error {
 	return exec.
 		Command("hyprctl", "dispatch", "movewindowpixel", "exact", fmt.Sprintf("%d %d,address:%s", x, y, address)).

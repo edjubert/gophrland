@@ -2,38 +2,11 @@ package internal
 
 import (
 	"fmt"
-	"gophrland/pkg/server/pkg/config"
-	"gophrland/pkg/server/pkg/plugins/bring_float"
-	"gophrland/pkg/server/pkg/plugins/expose"
-	"gophrland/pkg/server/pkg/plugins/scratchpads"
+	"github.com/edjubert/gophrland/plugins"
 	"net"
-	"strings"
 )
 
-func callCommand(command string, opts config.Options) error {
-	fields := strings.Fields(command)
-	plugin := fields[0]
-
-	switch plugin {
-	case config.SCRATCHPADS:
-		cmd := fields[1]
-		args := fields[2:]
-		return scratchpads.Command(cmd, args, opts.Scratchpads)
-	case config.EXPOSE:
-		cmd := ""
-		if len(fields[1:]) > 0 {
-			cmd = fields[1]
-		}
-		return expose.Command(cmd, opts.Expose)
-	case config.BRING_FLOAT:
-		cmd := fields[1]
-		return bring_float.Command(cmd, opts.BringFloat)
-	default:
-		return fmt.Errorf("[ERROR] - %s is not a recognized command\n", plugin)
-	}
-}
-
-func ProcessClient(connection net.Conn, loadedConf config.Config) {
+func ProcessClient(connection net.Conn, loadedConf plugins.Config) {
 	defer closeConnection(connection)
 
 	buffer := make([]byte, 1024)

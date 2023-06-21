@@ -1,7 +1,7 @@
 plugins:
   - "scratchpads"
   - "expose"
-  - "bring_float"
+  - "float"
 
 options:
   bring_float:

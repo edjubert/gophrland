@@ -6,19 +6,15 @@ import (
 	"os"
 )
 
-const (
-	ServerHost = "localhost"
-	ServerPort = "9988"
-	ServerType = "tcp"
-)
+const ServerType = "tcp"
 
-func CreateServer() net.Listener {
-	server, err := net.Listen(ServerType, ServerHost+":"+ServerPort)
+func CreateServer(host string, port int) net.Listener {
+	server, err := net.Listen(ServerType, fmt.Sprintf("%s:%d", host, port))
 	if err != nil {
 		fmt.Println("[ERROR] - Error listening:", err.Error())
 		os.Exit(1)
 	}
 
-	fmt.Println("[INFO] - Listening on " + ServerHost + ":" + ServerPort)
+	fmt.Printf("[INFO] - Listening on %s:%d\n", host, port)
 	return server
 }
