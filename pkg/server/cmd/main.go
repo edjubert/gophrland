@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
 	"github.com/edjubert/gophrland/pkg/logging"
 	server "github.com/edjubert/gophrland/pkg/server/internal"
 	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
@@ -37,8 +36,7 @@ func New(options ...Option) error {
 		opt(&opts)
 	}
 
-	hyprlandSignature := tools.GetSignature()
-	s := server.CreateSocket(hyprlandSignature)
+	s := server.CreateSocket()
 	defer func() {
 		_ = s.Close()
 	}()
@@ -46,11 +44,7 @@ func New(options ...Option) error {
 	loadedConf := config.ReadConfig(opts.configPath)
 	plugins.ApplyConfig(loadedConf)
 
-	go IPC.ConnectEvents(hyprlandSignature)
-	//_, err := IPC.ConnectHyprctl(hyprlandSignature)
-	//if err != nil {
-	//	fmt.Println("[ERROR] - Could not open hyprctl socket", err)
-	//}
+	go IPC.ConnectEvents()
 
 	fmt.Println("[INFO] - Waiting for client...")
 	for {
@@ -62,6 +56,4 @@ func New(options ...Option) error {
 
 		go server.ProcessClient(connection, loadedConf)
 	}
-
-	return nil
 }

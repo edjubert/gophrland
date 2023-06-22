@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
 	"log"
 	"net"
 	"strings"
@@ -66,7 +67,8 @@ func handleMessage(msg string) {
 	//cmd := m[0]
 	//arg := m[1]
 }
-func ConnectHyprctl(signature string) (net.Conn, error) {
+func ConnectHyprctl() (net.Conn, error) {
+	signature := tools.GetSignature()
 	hyprctl := "/tmp/hypr/" + signature + "/.socket.sock"
 
 	conn, err := net.Dial("unix", hyprctl)
@@ -74,25 +76,8 @@ func ConnectHyprctl(signature string) (net.Conn, error) {
 		log.Fatal("[HYPRCTL] listen error", err)
 		return nil, err
 	}
-	defer closeConn(conn)
 
-	fmt.Println("[INFO] connected to hyprctl")
-	err = Write(conn, "-j/monitors")
-	if err != nil {
-		fmt.Println("[ERROR] could not write", err)
-		return nil, err
-	}
-
-	for {
-		msg, err := Read(conn)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		fmt.Println("[INFO]: ", msg)
-	}
-
-	return nil, nil
+	return conn, nil
 }
 
 func closeConn(conn net.Conn) {
@@ -101,7 +86,8 @@ func closeConn(conn net.Conn) {
 	}
 }
 
-func ConnectEvents(signature string) {
+func ConnectEvents() {
+	signature := tools.GetSignature()
 	socket := "/tmp/hypr/" + signature + "/.socket2.sock"
 
 	conn, err := net.Dial("unix", socket)

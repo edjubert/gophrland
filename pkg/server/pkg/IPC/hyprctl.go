@@ -102,7 +102,7 @@ func ActiveMonitor(monitors []HyprlandMonitor) (HyprlandMonitor, error) {
 
 func SendNotification(time int, msgType, msg string) error {
 	icon := -1
-	prefix := "[Gophrland]"
+	prefix := "  [Gophrland]"
 
 	switch msgType {
 	case "warning":
@@ -121,20 +121,31 @@ func SendNotification(time int, msgType, msg string) error {
 		icon = -1
 	}
 
-	fmt.Println("hyprctl", "notify", strconv.Itoa(icon), strconv.Itoa(time), "rgb(ff1ea3)", "salut")
-	return exec.
-		Command("hyprctl", "notify", strconv.Itoa(icon), strconv.Itoa(time), "rgb(ff1ea3)", fmt.Sprintf("  %s: %s", prefix, msg)).
-		Run()
+	color := "rgb(ff1ea3)"
+	return runHyprctlCmd(fmt.Sprintf("notify %d %d %s %s: %s", icon, time, color, prefix, msg))
+}
+
+func runHyprctlCmd(cmd string) error {
+	conn, err := ConnectHyprctl()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = conn.Close()
+	}()
+
+	if _, err := conn.Write([]byte(cmd)); err != nil {
+		return err
+	}
+	return nil
 }
 
 func MoveWindowPixelExact(x, y int, address string) error {
-	return exec.
-		Command("hyprctl", "dispatch", "movewindowpixel", "exact", fmt.Sprintf("%d %d,address:%s", x, y, address)).
-		Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch movewindowpixel exact %d %d,address:%s", x, y, address))
 }
 
 func ToggleSpecialWorkspace(name string) error {
-	return exec.Command("hyprctl", "dispatch", "togglespecialworkspace", name).Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch togglespecialworkspace %s", name))
 }
 
 func CenterFloatingClient(client HyprlandClient, monitor HyprlandMonitor) error {
@@ -146,14 +157,7 @@ func CenterFloatingClient(client HyprlandClient, monitor HyprlandMonitor) error 
 	centerX := (monitor.X + monitor.Width - monitor.Width/2) - client.Size[0]/2 - randFactorX/2 + randX
 	centerY := (monitor.Y + monitor.Height - monitor.Height/2) - client.Size[1]/2 - randFactorY/2 + randY + margin
 
-	return exec.
-		Command(
-			"hyprctl",
-			"dispatch",
-			"movewindowpixel",
-			"exact",
-			fmt.Sprintf("%d %d,address:%s", centerX, centerY, client.Address)).
-		Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch movewindowpixel exact %d %d,address:%s", centerX, centerY, client.Address))
 }
 
 func MoveToCurrent(address string) error {
@@ -175,18 +179,18 @@ func MoveToCurrent(address string) error {
 }
 
 func FocusCurrentWorkspace(currentWorkspaceId int) error {
-	return exec.Command("hyprctl", "dispatch", "workspace", strconv.Itoa(currentWorkspaceId)).Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch workspace %d", currentWorkspaceId))
 }
 
 func MoveToWorkspaceID(currentWorkspaceID int, address string) error {
 	return MoveToWorkspaceSilent(strconv.Itoa(currentWorkspaceID), address)
 }
 func FocusWindow(address string) error {
-	return exec.Command("hyprctl", "dispatch", "focuswindow", "address:"+address).Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch focuswindow address,%s", address))
 }
 
 func MoveToWorkspaceSilent(name, address string) error {
-	return exec.Command("hyprctl", "dispatch", "movetoworkspacesilent", fmt.Sprintf("%s,address:%s", name, address)).Run()
+	return runHyprctlCmd(fmt.Sprintf("dispatch movetoworkspacesilent %s,address:%s", name, address))
 }
 
 func GetActiveWorkspace() (HyprlandWorkspace, error) {

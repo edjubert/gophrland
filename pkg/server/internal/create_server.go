@@ -2,13 +2,15 @@ package internal
 
 import (
 	"fmt"
+	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
 	"log"
 	"net"
 )
 
 const ServerType = "tcp"
 
-func CreateSocket(signature string) net.Listener {
+func CreateSocket() net.Listener {
+	signature := tools.GetSignature()
 	socket := "/tmp/hypr/" + signature + "/.gophrland.sock"
 
 	server, err := net.Listen("unix", socket)
