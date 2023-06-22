@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const ServerHost = "localhost"
-
 func AddCommand(cmd *cobra.Command) {
 	cmd.AddCommand(scratchpads.Scratchpads())
 	cmd.AddCommand(expose.Expose())

@@ -12,7 +12,6 @@ import (
 )
 
 type appArgs struct {
-	Port   int
 	Config string
 }
 
@@ -36,11 +35,6 @@ func AddCommand(cmd *cobra.Command, config string) {
 		"config file (default ~/.config/hyprland/gophrland.yaml)",
 	)
 
-	fl.IntVarP(
-		&args.Port, "port", "p", 9988,
-		"The port to use for local TCP server",
-	)
-
 	cmd.AddCommand(daemon)
 }
 
@@ -55,7 +49,6 @@ func run(ctx context.Context, args appArgs) error {
 		return serverCmd.New(
 			serverCmd.WithLogger(logger),
 			serverCmd.WithConfigFilePath(args.Config),
-			serverCmd.WithPort(args.Port),
 		)
 	})
 

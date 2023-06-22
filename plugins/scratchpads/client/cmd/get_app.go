@@ -7,7 +7,7 @@ import (
 )
 
 func GetToggle(cmd *cobra.Command, args []string) error {
-	conn := tools.StartTCPConnection("localhost", 9988)
+	conn := tools.StartUnixConnection()
 
 	if len(args) != 1 {
 		return cmd.Help()

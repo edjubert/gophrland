@@ -174,14 +174,40 @@ Create an `Run` function
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+    "fmt"
+    "github.com/edjubert/gophrland/pkg/client/pkg/tools"
+    "github.com/spf13/cobra"
 )
+
+func MyAwesomeFunction(cmd *cobra.Command, args []string) error {
+  conn := tools.StartUnixConnection()
+
+  // If you command take only one argument
+  if len(args) != 1 {
+    return cmd.Help()
+  }
+
+  if _, err := conn.Write([]byte(fmt.Sprintf("scratchpads toggle %s", args[0]))); err != nil {
+    panic(err)
+  }
+
+  buffer := make([]byte, 1024)
+  _, err := conn.Read(buffer)
+  if err != nil {
+    fmt.Println("[ERROR] - Error reading:", err.Error())
+    panic(err)
+  }
+
+  return nil
+}
+
 
 func Run() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "myAwesomePlugin",
 		Short: "My awesome plugin CLI handler",
 		Long:  "These are tools to use the 'my awesome plugin' plugin from the CLI",
+		RunE: MyAwesomeFunction,
 	}
 
 
@@ -197,8 +223,6 @@ import (
   myAwesomePlugin "github.com/edjubert/gophrland/plugins/myAwesomePlugin/client/cmd"
   "github.com/spf13/cobra"
 )
-
-const ServerHost = "localhost"
 
 func AddCommand(cmd *cobra.Command) {
   cmd.AddCommand(myAwesomePlugin.Run())

@@ -7,7 +7,7 @@ import (
 )
 
 func GetBringCurrent(_ *cobra.Command, args []string) error {
-	conn := tools.StartTCPConnection("localhost", 9988)
+	conn := tools.StartUnixConnection()
 
 	if len(args) > 0 {
 		return fmt.Errorf("[ERROR] - this command do not take arguments")

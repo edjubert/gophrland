@@ -1,20 +1,21 @@
 package tools
 
 import (
-	"fmt"
 	"net"
+	"os"
 )
 
-func StartConnection(protocol, host string, port int) net.Conn {
-	//establish connection
-	connection, err := net.Dial(protocol, fmt.Sprintf("%s:%d", host, port))
+const HyprlandInstanceSignature = "HYPRLAND_INSTANCE_SIGNATURE"
+
+func GetSignature() string {
+	return os.Getenv(HyprlandInstanceSignature)
+}
+
+func StartUnixConnection() net.Conn {
+	connection, err := net.Dial("unix", "/tmp/hypr/"+GetSignature()+"/.gophrland.sock")
 	if err != nil {
 		panic(err)
 	}
 
 	return connection
-}
-
-func StartTCPConnection(host string, port int) net.Conn {
-	return StartConnection("tcp", host, port)
 }

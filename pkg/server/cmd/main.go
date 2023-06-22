@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
 	"github.com/edjubert/gophrland/pkg/logging"
-	internal2 "github.com/edjubert/gophrland/pkg/server/internal"
+	server "github.com/edjubert/gophrland/pkg/server/internal"
 	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
 	"github.com/edjubert/gophrland/pkg/server/pkg/config"
 	"github.com/edjubert/gophrland/plugins"
@@ -12,8 +13,6 @@ import (
 
 type serverOptions struct {
 	logger     logging.Logger
-	port       int
-	host       string
 	configPath string
 }
 
@@ -25,34 +24,28 @@ func WithLogger(logger logging.Logger) Option {
 	}
 }
 
-func WithPort(port int) Option {
-	return func(opts *serverOptions) {
-		opts.port = port
-	}
-}
-
 func WithConfigFilePath(path string) Option {
 	return func(opts *serverOptions) {
 		opts.configPath = path
 	}
 }
 
-const HyprlandInstanceSignature = "HYPRLAND_INSTANCE_SIGNATURE"
-
 func New(options ...Option) error {
-	opts := serverOptions{logger: logging.Noop, port: 9988, host: plugins.ServerHost}
+	opts := serverOptions{logger: logging.Noop}
 
 	for _, opt := range options {
 		opt(&opts)
 	}
 
-	server := internal2.CreateServer(opts.host, opts.port)
-	defer internal2.CloseServer(server)
+	hyprlandSignature := tools.GetSignature()
+	s := server.CreateSocket(hyprlandSignature)
+	defer func() {
+		_ = s.Close()
+	}()
 
 	loadedConf := config.ReadConfig(opts.configPath)
 	plugins.ApplyConfig(loadedConf)
 
-	hyprlandSignature := os.Getenv(HyprlandInstanceSignature)
 	go IPC.ConnectEvents(hyprlandSignature)
 	//_, err := IPC.ConnectHyprctl(hyprlandSignature)
 	//if err != nil {
@@ -61,13 +54,13 @@ func New(options ...Option) error {
 
 	fmt.Println("[INFO] - Waiting for client...")
 	for {
-		connection, err := server.Accept()
+		connection, err := s.Accept()
 		if err != nil {
 			fmt.Println("[ERROR] - Error accepting: ", err.Error())
 			os.Exit(1)
 		}
 
-		go internal2.ProcessClient(connection, loadedConf)
+		go server.ProcessClient(connection, loadedConf)
 	}
 
 	return nil
