@@ -5,16 +5,17 @@ import (
 )
 
 const (
-	TOGGLE = "toggle"
-	SHOW   = "show"
-	HIDE   = "hide"
+	Name      = "scratchpads"
+	ToggleCmd = "toggle"
+	ShowCmd   = "show"
+	HideCmd   = "hide"
 )
 
 func Command(cmd string, args []string, opts []map[string]ScratchpadOptions) error {
 	switch cmd {
-	case TOGGLE:
+	case ToggleCmd:
 		return toggle(args, opts)
-	case SHOW, HIDE:
+	case ShowCmd, HideCmd:
 		return fmt.Errorf("[ERROR] - not (yet) implemented")
 	default:
 		return fmt.Errorf("[WARN] - unrecognized command")

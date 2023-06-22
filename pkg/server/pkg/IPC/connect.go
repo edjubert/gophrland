@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 	"log"
 	"net"
 	"strings"
@@ -58,17 +58,28 @@ func Read(c net.Conn) (string, error) {
 	return string(data), nil
 }
 
-func handleMessage(msg string) {
-	m := strings.Split(msg, ">>")
-	if len(m) < 1 {
-		fmt.Println("[WARN] - Not enough args")
-		return
+func handleMessage(message string) {
+	msgLine := strings.Split(message, "\n")
+	for _, msg := range msgLine {
+		m := strings.Split(msg, ">>")
+
+		if len(m) < 1 {
+			fmt.Println("[WARN] - Not enough args")
+			return
+		}
+		if len(m) < 2 {
+			return
+		}
+		fmt.Printf("[%s] - %s:\t%s\n", m, m[0], m[1])
+
+		if m[0] == "activewindow" {
+
+		}
 	}
-	//cmd := m[0]
-	//arg := m[1]
+
 }
 func ConnectHyprctl() (net.Conn, error) {
-	signature := tools.GetSignature()
+	signature := IPC.GetSignature()
 	hyprctl := "/tmp/hypr/" + signature + "/.socket.sock"
 
 	conn, err := net.Dial("unix", hyprctl)
@@ -87,7 +98,7 @@ func closeConn(conn net.Conn) {
 }
 
 func ConnectEvents() {
-	signature := tools.GetSignature()
+	signature := IPC.GetSignature()
 	socket := "/tmp/hypr/" + signature + "/.socket2.sock"
 
 	conn, err := net.Dial("unix", socket)
@@ -97,11 +108,11 @@ func ConnectEvents() {
 	defer closeConn(conn)
 
 	for {
-		_, err := Read(conn)
+		msg, err := Read(conn)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		//handleMessage(msg)
+		handleMessage(msg)
 	}
 }

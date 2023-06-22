@@ -175,12 +175,12 @@ package cmd
 
 import (
     "fmt"
-    "github.com/edjubert/gophrland/pkg/client/pkg/tools"
+    "github.com/edjubert/hyprland-ipc-go"
     "github.com/spf13/cobra"
 )
 
 func MyAwesomeFunction(cmd *cobra.Command, args []string) error {
-  conn := tools.StartUnixConnection()
+  conn := IPC.StartUnixConnection()
 
   // If you command take only one argument
   if len(args) != 1 {

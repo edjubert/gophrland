@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/client/pkg/tools"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 	"github.com/spf13/cobra"
 )
 
 func GetToggle(cmd *cobra.Command, args []string) error {
-	conn := tools.StartUnixConnection()
+	conn := IPC.StartUnixConnection()
 
 	if len(args) != 1 {
 		return cmd.Help()

@@ -14,17 +14,17 @@ func callCommand(command string, opts plugins.Options) error {
 	plugin := fields[0]
 
 	switch plugin {
-	case plugins.Scratchpads:
+	case scratchpads.Name:
 		cmd := fields[1]
 		args := fields[2:]
 		return scratchpads.Command(cmd, args, opts.Scratchpads)
-	case plugins.Expose:
+	case expose.Name:
 		cmd := ""
 		if len(fields[1:]) > 0 {
 			cmd = fields[1]
 		}
 		return expose.Command(cmd, opts.Expose)
-	case plugins.Float:
+	case float.Name:
 		cmd := fields[1]
 		return float.Command(cmd, opts.Float)
 	default:

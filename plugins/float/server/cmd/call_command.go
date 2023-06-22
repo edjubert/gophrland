@@ -3,12 +3,13 @@ package cmd
 import "fmt"
 
 const (
-	Bring = "bring"
+	Name     = "float"
+	BringCmd = "bring"
 )
 
 func Command(cmd string, opts BringFloatOptions) error {
 	switch cmd {
-	case Bring:
+	case BringCmd:
 		return bringCurrent(opts)
 	default:
 		return fmt.Errorf("[WARN] - unrecognized command")

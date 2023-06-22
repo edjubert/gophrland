@@ -7,7 +7,9 @@ import (
 )
 
 func ProcessClient(connection net.Conn, loadedConf plugins.Config) {
-	defer closeConnection(connection)
+	defer func() {
+		_ = connection.Close()
+	}()
 
 	buffer := make([]byte, 1024)
 	mLen, err := connection.Read(buffer)

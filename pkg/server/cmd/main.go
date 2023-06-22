@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/edjubert/gophrland/pkg/logging"
 	server "github.com/edjubert/gophrland/pkg/server/internal"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	IPC "github.com/edjubert/hyprland-ipc-go"
+
+	ipc2 "github.com/edjubert/gophrland/pkg/server/pkg/IPC"
 	"github.com/edjubert/gophrland/pkg/server/pkg/config"
 	"github.com/edjubert/gophrland/plugins"
 	"os"
@@ -36,7 +38,7 @@ func New(options ...Option) error {
 		opt(&opts)
 	}
 
-	s := server.CreateSocket()
+	s := IPC.CreateSocket()
 	defer func() {
 		_ = s.Close()
 	}()
@@ -44,7 +46,7 @@ func New(options ...Option) error {
 	loadedConf := config.ReadConfig(opts.configPath)
 	plugins.ApplyConfig(loadedConf)
 
-	go IPC.ConnectEvents()
+	go ipc2.ConnectEvents()
 
 	fmt.Println("[INFO] - Waiting for client...")
 	for {
