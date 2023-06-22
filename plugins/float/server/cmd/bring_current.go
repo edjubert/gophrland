@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 )
 
 const OFFSET = 0.5

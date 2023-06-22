@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
-	cmd2 "github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
+	server "github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 	"os/exec"
 	"reflect"
 	"strings"
@@ -58,11 +58,11 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 							monitors, err := IPC.Monitors("-j")
 							monitor, err := IPC.ActiveMonitor(monitors)
 
-							opts := cmd2.AnimationsOptions{
+							opts := server.AnimationsOptions{
 								Margin:    option.Margin,
 								Animation: option.Animation,
 							}
-							if err := cmd2.ToAnimation(client, monitor, opts); err != nil {
+							if err := server.ToAnimation(client, monitor, opts); err != nil {
 
 							}
 

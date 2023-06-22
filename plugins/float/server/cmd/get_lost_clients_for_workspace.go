@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 )
 
 func getLostClientsForWorkspace(workspace IPC.HyprlandWorkspace, monitor IPC.HyprlandMonitor, opts BringFloatOptions) ([]LostClient, error) {

@@ -6,7 +6,6 @@ import (
 	server "github.com/edjubert/gophrland/pkg/server/internal"
 	IPC "github.com/edjubert/hyprland-ipc-go"
 
-	ipc2 "github.com/edjubert/gophrland/pkg/server/pkg/IPC"
 	"github.com/edjubert/gophrland/pkg/server/pkg/config"
 	"github.com/edjubert/gophrland/plugins"
 	"os"
@@ -46,7 +45,7 @@ func New(options ...Option) error {
 	loadedConf := config.ReadConfig(opts.configPath)
 	plugins.ApplyConfig(loadedConf)
 
-	go ipc2.ConnectEvents()
+	go IPC.ConnectEvents()
 
 	fmt.Println("[INFO] - Waiting for client...")
 	for {

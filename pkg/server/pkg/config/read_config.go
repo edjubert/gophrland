@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
 	"github.com/edjubert/gophrland/plugins"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 	"gopkg.in/yaml.v3"
 	"os"
 )

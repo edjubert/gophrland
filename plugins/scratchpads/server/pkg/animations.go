@@ -2,16 +2,16 @@ package pkg
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 )
 
 const (
-	DEFAULT_MARGIN = 50
-	FROM_LEFT      = "fromLeft"
-	FROM_RIGHT     = "fromRight"
-	FROM_TOP       = "fromTop"
-	FROM_BOTTOM    = "fromBottom"
-	NO_ANIMATION   = ""
+	DefaultMargin = 50
+	FromLeft      = "fromLeft"
+	FromRight     = "fromRight"
+	FromTop       = "fromTop"
+	FromBottom    = "fromBottom"
+	NoAnimation   = ""
 )
 
 type AnimationsOptions struct {
@@ -21,13 +21,13 @@ type AnimationsOptions struct {
 
 func FromAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options AnimationsOptions) error {
 	switch options.Animation {
-	case FROM_LEFT:
+	case FromLeft:
 		return fromLeft(client, monitor, options.Margin)
-	case FROM_RIGHT:
+	case FromRight:
 		return fromRight(client, monitor, options.Margin)
-	case FROM_TOP:
+	case FromTop:
 		return fromTop(client, monitor, options.Margin)
-	case FROM_BOTTOM, NO_ANIMATION:
+	case FromBottom, NoAnimation:
 		return fromBottom(client, monitor, options.Margin)
 	default:
 		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
@@ -39,15 +39,15 @@ func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options
 	}
 
 	switch options.Animation {
-	case FROM_LEFT:
+	case FromLeft:
 		return toLeft(client, monitor)
-	case FROM_RIGHT:
+	case FromRight:
 		return toRight(client, monitor)
-	case FROM_TOP:
+	case FromTop:
 		return toTop(client, monitor)
-	case FROM_BOTTOM:
+	case FromBottom:
 		return toBottom(client, monitor)
-	case NO_ANIMATION:
+	case NoAnimation:
 		return nil
 	default:
 		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
@@ -56,7 +56,7 @@ func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options
 
 func toTop(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
-	y := monitor.Y - client.Size[1] - DEFAULT_MARGIN
+	y := monitor.Y - client.Size[1] - DefaultMargin
 
 	return IPC.MoveWindowPixelExact(x, y, client.Address)
 }
@@ -70,7 +70,7 @@ func fromTop(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int)
 
 func toLeft(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
 	x := monitor.X - monitor.Width - client.Size[0]
-	y := monitor.Y + DEFAULT_MARGIN
+	y := monitor.Y + DefaultMargin
 
 	err := IPC.MoveWindowPixelExact(x, y, client.Address)
 	return err
@@ -85,7 +85,7 @@ func fromLeft(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int
 
 func toRight(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
 	x := monitor.X + monitor.Width
-	y := monitor.Y + DEFAULT_MARGIN
+	y := monitor.Y + DefaultMargin
 
 	return IPC.MoveWindowPixelExact(x, y, client.Address)
 }

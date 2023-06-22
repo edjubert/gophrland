@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 )
 
 func clientIsLost(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, opts BringFloatOptions) (LostClient, error) {

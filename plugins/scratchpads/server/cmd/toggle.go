@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/gophrland/pkg/server/pkg/IPC"
 	"github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
+	IPC "github.com/edjubert/hyprland-ipc-go"
 	"time"
 )
 
