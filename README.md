@@ -5,7 +5,7 @@ This is a rework of [pyprland](https://github.com/hyprland-community/pyprland)
 ## Installation
 ### From go cli
 ```bash
-go install github.com/edjubert/gophrland
+go install github.com/edjubert/gophrland@latest
 ```
 
 ### From source
