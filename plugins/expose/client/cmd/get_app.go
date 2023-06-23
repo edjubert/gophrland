@@ -6,8 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const UnixSocketName = ".gophrland.sock"
+
 func GetShow(_ *cobra.Command, args []string) error {
-	conn := IPC.StartUnixConnection()
+	conn := IPC.StartUnixConnection(UnixSocketName)
 
 	if len(args) != 0 {
 		return fmt.Errorf("[ERROR] -  no arg necessary")
@@ -26,8 +28,9 @@ func GetShow(_ *cobra.Command, args []string) error {
 
 	return nil
 }
+
 func GetToggle(_ *cobra.Command, args []string) error {
-	conn := IPC.StartUnixConnection()
+	conn := IPC.StartUnixConnection(UnixSocketName)
 	if len(args) != 0 {
 		return fmt.Errorf("[ERROR] -  no arg necessary")
 	}

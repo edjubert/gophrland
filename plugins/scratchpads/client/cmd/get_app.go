@@ -6,8 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const UnixSocketName = ".gophrland.sock"
+
 func GetToggle(cmd *cobra.Command, args []string) error {
-	conn := IPC.StartUnixConnection()
+	conn := IPC.StartUnixConnection(UnixSocketName)
 
 	if len(args) != 1 {
 		return cmd.Help()

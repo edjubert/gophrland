@@ -6,8 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const UnixSocketName = ".gophrland.sock"
+
 func GetBringCurrent(_ *cobra.Command, args []string) error {
-	conn := IPC.StartUnixConnection()
+	conn := IPC.StartUnixConnection(UnixSocketName)
 
 	if len(args) > 0 {
 		return fmt.Errorf("[ERROR] - this command do not take arguments")

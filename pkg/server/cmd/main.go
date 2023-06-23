@@ -30,6 +30,8 @@ func WithConfigFilePath(path string) Option {
 	}
 }
 
+const UnixSocketName = ".gophrland.sock"
+
 func New(options ...Option) error {
 	opts := serverOptions{logger: logging.Noop}
 
@@ -37,7 +39,7 @@ func New(options ...Option) error {
 		opt(&opts)
 	}
 
-	s := IPC.CreateSocket()
+	s := IPC.CreateSocket(UnixSocketName)
 	defer func() {
 		_ = s.Close()
 	}()
