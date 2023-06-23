@@ -3,7 +3,15 @@ Gophrland is a set of tools to manage windows on Hyprland.
 This is a rework of [pyprland](https://github.com/hyprland-community/pyprland)
 
 ## Installation
+### From go cli
 ```bash
+go install github.com/edjubert/gophrland
+```
+
+### From source
+```bash
+git clone https://github.com/edjubert/gophrland
+cd gophrland
 go build -o gophrland ./cmd/gophrland
 mv gophrland ~/.local/bin/gophrland
 ```
