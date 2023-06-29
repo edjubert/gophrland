@@ -38,7 +38,7 @@ func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error 
 
 func toggle(args []string, options []map[string]ScratchpadOptions) error {
 	if len(args) > 1 {
-		return fmt.Errorf("[ERROR] - to many arguments\n")
+		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
 
 	option := getOption(args[0], options)

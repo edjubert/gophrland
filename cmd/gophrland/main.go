@@ -19,8 +19,5 @@ func main() {
 func run(ctx context.Context) error {
 	_ = logging.New(os.Stdout)
 
-	//ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
-	//defer cancel()
-
 	return cmd.Execute()
 }
