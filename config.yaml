@@ -6,7 +6,7 @@ plugins:
 
 options:
   bring_float:
-    offset: 0.9
+    offset: 0.01
 
   scratchpads:
     - term:

@@ -47,8 +47,6 @@ func New(options ...Option) error {
 	loadedConf := config.ReadConfig(opts.configPath)
 	plugins.ApplyConfig(loadedConf)
 
-	go IPC.ConnectEvents()
-
 	fmt.Println("[INFO] - Waiting for client...")
 	for {
 		connection, err := s.Accept()

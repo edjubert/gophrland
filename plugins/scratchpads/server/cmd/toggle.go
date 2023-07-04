@@ -36,7 +36,10 @@ func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error 
 	return nil
 }
 
+var blockListener = false
+
 func toggle(args []string, options []map[string]ScratchpadOptions) error {
+	blockListener = true
 	if len(args) > 1 {
 		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
@@ -85,6 +88,9 @@ func toggle(args []string, options []map[string]ScratchpadOptions) error {
 			return err
 		}
 	}
+
+	time.Sleep(time.Second * 2)
+	blockListener = false
 	return nil
 }
 
