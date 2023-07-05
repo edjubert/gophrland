@@ -28,7 +28,7 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 	if len(options) > 0 {
 		for _, scratchpad := range options {
 			for name, option := range scratchpad {
-				fmt.Printf("[INFO] - Loading Scratchpads '%s' with options\n", name)
+				fmt.Printf("[INFO] - Loading Scratchpad '%s' with options\n", name)
 
 				ref := reflect.ValueOf(option)
 				fields := reflect.VisibleFields(reflect.TypeOf(option))

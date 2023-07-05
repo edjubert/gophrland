@@ -26,6 +26,7 @@ func ApplyConfig(config Config) {
 				fmt.Printf("[ERROR] - loading plugin %s", plugin)
 				return
 			}
+			go scratchpads.LoadEventCallbacks(config.Options.Scratchpads)
 		case expose.Name:
 			expose.LoadPlugin()
 		case float.Name:
