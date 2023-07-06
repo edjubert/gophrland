@@ -27,7 +27,7 @@ func getAllScratchpadsAndClients(options []map[string]ScratchpadOptions) ([]Scra
 			if byName[name].Pid == 0 {
 				client, err := IPC.GetClientByClassName(clients, opts.Class)
 				if err != nil {
-					fmt.Println("[ERR] 33 - ", err)
+					fmt.Println("[ERR] - ", err)
 				}
 
 				scratchpads = append(scratchpads, ScratchpadsAndClients{
@@ -91,7 +91,6 @@ func hideOnUnfocused(clientAddresses []string, options []map[string]ScratchpadOp
 				Animation: scratch.Scratchpad.Options.Animation,
 			}
 
-			fmt.Println("Hidding ", scratch.Client.Title)
 			if err := hideClient(scratch.Client, activeMonitor, opts); err != nil {
 				fmt.Println("[ERROR]", err)
 			}

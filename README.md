@@ -83,6 +83,7 @@ gophrland daemon --config path/to/your/gophrland.yaml
   - class: [optional] if you want to get the window client by its class (works well for messaging apps such as Slack, Discord or Whatsdesk)
 
 ### Expose
+![expose.gif](./assets/expose.gif)
 - Name: `expose`
 - CLI:
   - toggle: `gophrland expose toggle`
@@ -96,6 +97,16 @@ gophrland daemon --config path/to/your/gophrland.yaml
   - toggle: `gophrland float bring current`
 - Options:
   - offset: percentage of window that have to be offscreen to be triggered
+
+### Monitors
+- Name: `monitors`
+- CLI:
+  - focus: Focus next/prev monitor
+    - next: `gophrland float focus next`
+    - prev: `gophrland float focus prev`
+  - move: Move window to next/prev monitor
+    - next: `gophrland move focus next`
+    - prev: `gophrland move focus prev`
 
 ## Write a plugin
 Write a plugin is easy
