@@ -72,6 +72,7 @@ gophrland daemon --config path/to/your/gophrland.yaml
 
 ## Plugins
 ### Scratchpads
+![scratchpads](https://github.com/edjubert/gophrland/assets/16240724/b2df1475-5528-40d4-bb54-6078f301dc9c)
 - Name: `scratchpads`
 - CLI:
   - toggle: `gophrland scratchpads toggle [name]`
