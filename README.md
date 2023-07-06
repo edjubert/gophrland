@@ -83,7 +83,7 @@ gophrland daemon --config path/to/your/gophrland.yaml
   - class: [optional] if you want to get the window client by its class (works well for messaging apps such as Slack, Discord or Whatsdesk)
 
 ### Expose
-![expose.gif](./assets/expose.gif)
+![expose](https://github.com/edjubert/gophrland/assets/16240724/6a37881f-2892-4636-99f6-1093af005275)
 - Name: `expose`
 - CLI:
   - toggle: `gophrland expose toggle`
