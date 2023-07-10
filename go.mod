@@ -3,7 +3,7 @@ module github.com/edjubert/gophrland
 go 1.19
 
 require (
-	github.com/edjubert/hyprland-ipc-go v0.0.13
+	github.com/edjubert/hyprland-ipc-go v0.0.14
 	github.com/mattn/go-isatty v0.0.19
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0

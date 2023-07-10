@@ -39,6 +39,7 @@ func move(args []string, opts MonitorsOptions) error {
 		nextMonitor = getNextMonitor(activeMonitorIndex, monitors)
 	} else if args[0] == Previous {
 		nextMonitor = getPrevMonitor(activeMonitorIndex, monitors)
+		fmt.Println("next monitor", nextMonitor)
 	}
 
 	return IPC.MoveToWorkspace(nextMonitor.ActiveWorkspace.Name, activeClient.Address)

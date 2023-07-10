@@ -2,12 +2,12 @@ package client
 
 import (
 	"fmt"
+	monitors "github.com/edjubert/gophrland/plugins/monitors/server/cmd"
 	IPC "github.com/edjubert/hyprland-ipc-go"
 	"github.com/spf13/cobra"
 )
 
 const (
-	Name           = "monitors"
 	FocusCmd       = "focus"
 	MoveCmd        = "move"
 	NextArg        = "next"
@@ -25,7 +25,7 @@ func GetCommand(ccmd string, args string) func(cmd *cobra.Command, _ []string) e
 		}
 		switch ccmd {
 		case FocusCmd, MoveCmd:
-			if _, err := conn.Write([]byte(fmt.Sprintf("%s %s %s", Name, ccmd, args[0]))); err != nil {
+			if _, err := conn.Write([]byte(fmt.Sprintf("%s %s %s", monitors.Name, ccmd, args))); err != nil {
 				return err
 			}
 		default:

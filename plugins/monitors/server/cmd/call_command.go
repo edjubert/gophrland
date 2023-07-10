@@ -8,6 +8,8 @@ const (
 )
 
 func Command(cmd string, args []string, opts MonitorsOptions) error {
+	fmt.Println("cmd", cmd)
+	fmt.Println("args", args)
 	switch cmd {
 	case Move:
 		return move(args, opts)

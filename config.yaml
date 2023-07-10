@@ -24,14 +24,12 @@ options:
     - slack:
         command: "slack"
         animation: "fromRight"
-        unfocus: "hide"
         class: "Slack"
         margin: 60
 
     - whatsdesk:
         command: "whatsdesk"
         animation: "fromBottom"
-        unfocus: "hide"
         class: "whatsdesk"
         margin: 40
 

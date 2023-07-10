@@ -29,7 +29,8 @@ func getNextMonitor(activeMonitorIndex int, monitors []IPC.HyprlandMonitor) IPC.
 }
 
 func getPrevMonitor(activeMonitorIndex int, monitors []IPC.HyprlandMonitor) IPC.HyprlandMonitor {
-	if activeMonitorIndex-1 > 0 {
+	fmt.Println("activemonitorindex", activeMonitorIndex, len(monitors))
+	if activeMonitorIndex-1 >= 0 {
 		return monitors[activeMonitorIndex-1]
 	} else {
 		return monitors[len(monitors)-1]
