@@ -11,7 +11,7 @@ import (
 type Options struct {
 	Scratchpads []map[string]scratchpads.ScratchpadOptions `yaml:"scratchpads"`
 	Expose      expose.ExposeOptions                       `yaml:"expose"`
-	Float       float.BringFloatOptions                    `yaml:"float"`
+	Float       float.FloatOptions                         `yaml:"float"`
 	Monitors    monitors.MonitorsOptions                   `yaml:"monitors"`
 }
 
@@ -25,7 +25,7 @@ func ApplyConfig(config Config) {
 		switch plugin {
 		case scratchpads.Name:
 			if err := scratchpads.LoadPlugin(config.Options.Scratchpads); err != nil {
-				fmt.Printf("[ERROR] - loading plugin %s", plugin)
+				fmt.Printf("[ERROR] - loading plugin '%s' -> %v\n", plugin, err)
 				return
 			}
 			go scratchpads.LoadEventCallbacks(config.Options.Scratchpads)

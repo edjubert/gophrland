@@ -7,7 +7,7 @@ const (
 	BringCmd = "bring"
 )
 
-func Command(cmd string, opts BringFloatOptions) error {
+func Command(cmd string, opts FloatOptions) error {
 	switch cmd {
 	case BringCmd:
 		return bringCurrent(opts)

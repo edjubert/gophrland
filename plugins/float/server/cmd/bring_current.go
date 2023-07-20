@@ -1,27 +1,30 @@
 package cmd
 
 import (
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 const OFFSET = 0.5
 
 type LostClient struct {
-	Client                   IPC.HyprlandClient
+	Client                   types.HyprlandClient
 	Left, Right, Top, Bottom bool
 }
 
-func bringCurrent(opts BringFloatOptions) error {
-	activeWorkspace, err := IPC.GetActiveWorkspace()
+func bringCurrent(opts FloatOptions) error {
+	getter := hyprctl.Get{}
+	activeWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err
 	}
 
-	monitors, err := IPC.Monitors("-j")
+	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
 	}
-	monitor, err := IPC.ActiveMonitor(monitors)
+
+	monitor, err := getter.ActiveMonitor(monitors)
 	if err != nil {
 		return err
 	}
@@ -30,8 +33,9 @@ func bringCurrent(opts BringFloatOptions) error {
 		return err
 	}
 
+	dispatch := hyprctl.Dispatch{}
 	for _, client := range lostClients {
-		if err := IPC.CenterFloatingClient(client.Client, monitor); err != nil {
+		if err := dispatch.Move.CenterFloatingClient(client.Client, monitor, opts.RandomizeCenter); err != nil {
 			return err
 		}
 	}

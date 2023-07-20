@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
 	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 type ScratchpadsAndClients struct {
 	Scratchpad Scratchpad
-	Client     IPC.HyprlandClient
+	Client     types.HyprlandClient
 }
 
 const (
@@ -16,7 +18,8 @@ const (
 )
 
 func getAllScratchpadsAndClients(options []map[string]ScratchpadOptions) ([]ScratchpadsAndClients, error) {
-	clients, err := IPC.GetClients()
+	getter := hyprctl.Get{}
+	clients, err := getter.Clients()
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +28,7 @@ func getAllScratchpadsAndClients(options []map[string]ScratchpadOptions) ([]Scra
 	for _, option := range options {
 		for name, opts := range option {
 			if byName[name].Pid == 0 {
-				client, err := IPC.GetClientByClassName(clients, opts.Class)
+				client, err := getter.ClientByClassName(clients, opts.Class)
 				if err != nil {
 					fmt.Println("[ERR] - ", err)
 				}
@@ -61,7 +64,8 @@ func hideOnUnfocused(clientAddresses []string, options []map[string]ScratchpadOp
 		return err
 	}
 
-	currentWorkspace, err := IPC.GetActiveWorkspace()
+	getter := hyprctl.Get{}
+	currentWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err
 	}
@@ -74,8 +78,8 @@ func hideOnUnfocused(clientAddresses []string, options []map[string]ScratchpadOp
 			}
 		}
 	}
-	monitors, err := IPC.Monitors("-j")
-	activeMonitor, err := IPC.ActiveMonitor(monitors)
+	monitors, err := getter.Monitors("-j")
+	activeMonitor, err := getter.ActiveMonitor(monitors)
 
 	for _, scratch := range scratches {
 		doKeep := false
@@ -87,11 +91,13 @@ func hideOnUnfocused(clientAddresses []string, options []map[string]ScratchpadOp
 
 		if !doKeep && !blockListener && scratch.Scratchpad.Options.Unfocus == HideOption {
 			opts := pkg.AnimationsOptions{
-				Margin:    scratch.Scratchpad.Options.Margin,
-				Animation: scratch.Scratchpad.Options.Animation,
+				Margin:    scratch.Scratchpad.Options.FloatOptions.Margin,
+				Animation: scratch.Scratchpad.Options.FloatOptions.Animation,
+				Width:     scratch.Scratchpad.Options.FloatOptions.Width,
+				Height:    scratch.Scratchpad.Options.FloatOptions.Height,
 			}
 
-			if err := hideClient(scratch.Client, activeMonitor, opts); err != nil {
+			if err := hideFloatingClient(scratch.Client, activeMonitor, opts); err != nil {
 				fmt.Println("[ERROR]", err)
 			}
 		}
@@ -106,7 +112,8 @@ func showOnUrgent(clientAddresses []string, options []map[string]ScratchpadOptio
 		return err
 	}
 
-	currentWorkspace, err := IPC.GetActiveWorkspace()
+	getter := hyprctl.Get{}
+	currentWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err
 	}
@@ -119,18 +126,20 @@ func showOnUrgent(clientAddresses []string, options []map[string]ScratchpadOptio
 			}
 		}
 	}
-	monitors, err := IPC.Monitors("-j")
-	activeMonitor, err := IPC.ActiveMonitor(monitors)
+	monitors, err := getter.Monitors("-j")
+	activeMonitor, err := getter.ActiveMonitor(monitors)
 
 	for _, scratch := range scratches {
 		for _, toKeep := range toKeepScratches {
 			if toKeep.Client.Pid == scratch.Client.Pid && scratch.Client.Workspace.Id == currentWorkspace.Id && !blockListener {
 				opts := pkg.AnimationsOptions{
-					Margin:    scratch.Scratchpad.Options.Margin,
-					Animation: scratch.Scratchpad.Options.Animation,
+					Margin:    scratch.Scratchpad.Options.FloatOptions.Margin,
+					Animation: scratch.Scratchpad.Options.FloatOptions.Animation,
+					Width:     scratch.Scratchpad.Options.FloatOptions.Width,
+					Height:    scratch.Scratchpad.Options.FloatOptions.Height,
 				}
 
-				if err := showClient(scratch.Client, activeMonitor, opts); err != nil {
+				if err := showFloatingClient(scratch.Client, activeMonitor, opts); err != nil {
 					fmt.Println("[ERROR]", err)
 				}
 			}

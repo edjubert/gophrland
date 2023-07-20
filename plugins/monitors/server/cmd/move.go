@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 func move(args []string, opts MonitorsOptions) error {
@@ -10,7 +11,8 @@ func move(args []string, opts MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
 
-	monitors, err := IPC.Monitors("-j")
+	getter := hyprctl.Get{}
+	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
 	}
@@ -19,7 +21,7 @@ func move(args []string, opts MonitorsOptions) error {
 		return nil
 	}
 
-	activeMonitor, err := IPC.ActiveMonitor(monitors)
+	activeMonitor, err := getter.ActiveMonitor(monitors)
 	if err != nil {
 		return err
 	}
@@ -29,12 +31,12 @@ func move(args []string, opts MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - Could not find monitor index")
 	}
 
-	activeClient, err := IPC.GetActiveClient()
+	activeClient, err := getter.ActiveClient()
 	if err != nil {
 		return err
 	}
 
-	nextMonitor := IPC.HyprlandMonitor{}
+	nextMonitor := types.HyprlandMonitor{}
 	if args[0] == Next {
 		nextMonitor = getNextMonitor(activeMonitorIndex, monitors)
 	} else if args[0] == Previous {
@@ -42,5 +44,6 @@ func move(args []string, opts MonitorsOptions) error {
 		fmt.Println("next monitor", nextMonitor)
 	}
 
-	return IPC.MoveToWorkspace(nextMonitor.ActiveWorkspace.Name, activeClient.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.ToWorkspaceName(nextMonitor.ActiveWorkspace.Name, activeClient.Address)
 }

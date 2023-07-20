@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/edjubert/gophrland/plugins"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
 	"gopkg.in/yaml.v3"
 	"os"
 )
@@ -11,7 +11,7 @@ import (
 func ReadConfig(file string) plugins.Config {
 	dat, err := os.ReadFile(file)
 	if err != nil {
-		_ = IPC.SendNotification(5000, "warning", fmt.Sprintf("Could not read config file '%s' -> %v\n", file, err))
+		_ = hyprctl.SendNotification(5000, "warning", fmt.Sprintf("Could not read config file '%s' -> %v\n", file, err))
 		fmt.Printf("[ERROR] - Could not read file '%s' -> %v\n", file, err)
 	}
 

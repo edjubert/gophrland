@@ -14,6 +14,8 @@ options:
         floatOpts:
           animation: "fromTop"
           margin: 60
+          width: "200%"
+          height: "100%"
         float: true
         unfocus: "hide"
 

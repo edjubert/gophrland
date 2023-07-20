@@ -14,6 +14,7 @@ import (
 type serverOptions struct {
 	logger     logging.Logger
 	configPath string
+	restart    bool
 }
 
 type Option func(opts *serverOptions)
@@ -30,6 +31,12 @@ func WithConfigFilePath(path string) Option {
 	}
 }
 
+func WithRestart(restart bool) Option {
+	return func(opts *serverOptions) {
+		opts.restart = restart
+	}
+}
+
 const UnixSocketName = ".gophrland.sock"
 
 func New(options ...Option) error {
@@ -37,6 +44,12 @@ func New(options ...Option) error {
 
 	for _, opt := range options {
 		opt(&opts)
+	}
+
+	if opts.restart {
+		if err := IPC.RemoveSocket(UnixSocketName); err != nil {
+			fmt.Printf("[ERROR] - Could not remove UnixSocketName %s\n", UnixSocketName)
+		}
 	}
 
 	s := IPC.CreateSocket(UnixSocketName)

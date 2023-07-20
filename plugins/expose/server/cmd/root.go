@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
 )
 
 const EXPOSED_SPECIAL_WORKSPACE = "exposed_special_workspace"
@@ -11,5 +11,6 @@ func show(options ExposeOptions) error {
 	if options.Name != "" {
 		name = options.Name
 	}
-	return IPC.ToggleSpecialWorkspace(name)
+	d := hyprctl.Dispatch{}
+	return d.Toggle.SpecialWorkspace(name)
 }

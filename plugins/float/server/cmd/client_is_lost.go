@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
-func clientIsLost(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, opts BringFloatOptions) (LostClient, error) {
+func clientIsLost(client types.HyprlandClient, monitor types.HyprlandMonitor, opts FloatOptions) (LostClient, error) {
 	offset := OFFSET
 	if opts.Offset > 0 && opts.Offset <= 1 {
 		offset = opts.Offset

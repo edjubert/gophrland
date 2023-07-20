@@ -2,7 +2,8 @@ package pkg
 
 import (
 	"fmt"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 const (
@@ -17,9 +18,11 @@ const (
 type AnimationsOptions struct {
 	Animation string
 	Margin    int
+	Width     string
+	Height    string
 }
 
-func FromAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options AnimationsOptions) error {
+func FromAnimation(client types.HyprlandClient, monitor types.HyprlandMonitor, options AnimationsOptions) error {
 	switch options.Animation {
 	case FromLeft:
 		return fromLeft(client, monitor, options.Margin)
@@ -33,7 +36,7 @@ func FromAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, optio
 		return fmt.Errorf("[WARN] - animation unrecognized (%s)", options.Animation)
 	}
 }
-func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options AnimationsOptions) error {
+func ToAnimation(client types.HyprlandClient, monitor types.HyprlandMonitor, options AnimationsOptions) error {
 	if client.Pid == 0 {
 		return fmt.Errorf("[ERROR] - no client")
 	}
@@ -54,59 +57,67 @@ func ToAnimation(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, options
 	}
 }
 
-func toTop(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
+func toTop(client types.HyprlandClient, monitor types.HyprlandMonitor) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y - client.Size[1] - DefaultMargin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func fromTop(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int) error {
+func fromTop(client types.HyprlandClient, monitor types.HyprlandMonitor, margin int) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y + margin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func toLeft(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
+func toLeft(client types.HyprlandClient, monitor types.HyprlandMonitor) error {
 	x := monitor.X - monitor.Width - client.Size[0]
 	y := monitor.Y + DefaultMargin
 
-	err := IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	err := dispatch.Move.WindowPixelExact(x, y, client.Address)
 	return err
 }
 
-func fromLeft(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int) error {
+func fromLeft(client types.HyprlandClient, monitor types.HyprlandMonitor, margin int) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y + margin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func toRight(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
+func toRight(client types.HyprlandClient, monitor types.HyprlandMonitor) error {
 	x := monitor.X + monitor.Width
 	y := monitor.Y + DefaultMargin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func fromRight(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int) error {
+func fromRight(client types.HyprlandClient, monitor types.HyprlandMonitor, margin int) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y + margin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func toBottom(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor) error {
+func toBottom(client types.HyprlandClient, monitor types.HyprlandMonitor) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y + client.Size[1] + monitor.Height
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }
 
-func fromBottom(client IPC.HyprlandClient, monitor IPC.HyprlandMonitor, margin int) error {
+func fromBottom(client types.HyprlandClient, monitor types.HyprlandMonitor, margin int) error {
 	x := (monitor.Width-client.Size[0])/2 + monitor.X
 	y := monitor.Y + margin
 
-	return IPC.MoveWindowPixelExact(x, y, client.Address)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Move.WindowPixelExact(x, y, client.Address)
 }

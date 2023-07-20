@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 const (
@@ -10,7 +11,7 @@ const (
 	Previous = "previous"
 )
 
-func getMonitorIndex(activeMonitor IPC.HyprlandMonitor, monitors []IPC.HyprlandMonitor) int {
+func getMonitorIndex(activeMonitor types.HyprlandMonitor, monitors []types.HyprlandMonitor) int {
 	for idx, monitor := range monitors {
 		if monitor.Id == activeMonitor.Id {
 			return idx
@@ -20,7 +21,7 @@ func getMonitorIndex(activeMonitor IPC.HyprlandMonitor, monitors []IPC.HyprlandM
 	return -1
 }
 
-func getNextMonitor(activeMonitorIndex int, monitors []IPC.HyprlandMonitor) IPC.HyprlandMonitor {
+func getNextMonitor(activeMonitorIndex int, monitors []types.HyprlandMonitor) types.HyprlandMonitor {
 	if activeMonitorIndex+1 < len(monitors) {
 		return monitors[activeMonitorIndex+1]
 	} else {
@@ -28,7 +29,7 @@ func getNextMonitor(activeMonitorIndex int, monitors []IPC.HyprlandMonitor) IPC.
 	}
 }
 
-func getPrevMonitor(activeMonitorIndex int, monitors []IPC.HyprlandMonitor) IPC.HyprlandMonitor {
+func getPrevMonitor(activeMonitorIndex int, monitors []types.HyprlandMonitor) types.HyprlandMonitor {
 	fmt.Println("activemonitorindex", activeMonitorIndex, len(monitors))
 	if activeMonitorIndex-1 >= 0 {
 		return monitors[activeMonitorIndex-1]
@@ -42,7 +43,8 @@ func focus(args []string, options MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
 
-	monitors, err := IPC.Monitors("-j")
+	getter := hyprctl.Get{}
+	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
 	}
@@ -51,7 +53,7 @@ func focus(args []string, options MonitorsOptions) error {
 		return nil
 	}
 
-	activeMonitor, err := IPC.ActiveMonitor(monitors)
+	activeMonitor, err := getter.ActiveMonitor(monitors)
 	if err != nil {
 		return err
 	}
@@ -61,12 +63,13 @@ func focus(args []string, options MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - Could not find monitor index")
 	}
 
-	nextMonitor := IPC.HyprlandMonitor{}
+	nextMonitor := types.HyprlandMonitor{}
 	if args[0] == Next {
 		nextMonitor = getNextMonitor(activeMonitorIndex, monitors)
 	} else if args[0] == Previous {
 		nextMonitor = getPrevMonitor(activeMonitorIndex, monitors)
 	}
 
-	return IPC.FocusMonitor(nextMonitor)
+	dispatch := hyprctl.Dispatch{}
+	return dispatch.Focus.Monitor(nextMonitor)
 }

@@ -3,18 +3,25 @@ package cmd
 import (
 	"fmt"
 	server "github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl"
 	"os/exec"
 	"reflect"
 	"strings"
 )
 
-type ScratchpadOptions struct {
-	Command   string `yaml:"command"`
+type ScratchpadFloatOptions struct {
 	Animation string `yaml:"animation,omitempty"`
-	Unfocus   string `yaml:"unfocus,omitempty"`
 	Margin    int    `yaml:"margin,omitempty"`
-	Class     string `yaml:"class,omitempty"`
+	Width     string `yaml:"width,omitempty"`
+	Height    string `yaml:"height,omitempty"`
+}
+
+type ScratchpadOptions struct {
+	Command      string                 `yaml:"command"`
+	Float        bool                   `yaml:"float"`
+	FloatOptions ScratchpadFloatOptions `yaml:"floatOpts"`
+	Unfocus      string                 `yaml:"unfocus,omitempty"`
+	Class        string                 `yaml:"class,omitempty"`
 }
 
 type Scratchpad struct {
@@ -48,22 +55,28 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 
 							pid := cmd.Process.Pid
 
-							clients, err := IPC.GetClients()
+							getter := hyprctl.Get{}
+							clients, err := getter.Clients()
 							if err != nil {
 							}
-							client, err := IPC.GetClientByPID(clients, pid)
+							client, err := getter.ClientByPID(clients, pid)
 							if err != nil {
 							}
 
-							monitors, err := IPC.Monitors("-j")
-							monitor, err := IPC.ActiveMonitor(monitors)
+							monitors, err := getter.Monitors("-j")
+							monitor, err := getter.ActiveMonitor(monitors)
 
-							opts := server.AnimationsOptions{
-								Margin:    option.Margin,
-								Animation: option.Animation,
-							}
-							if err := server.ToAnimation(client, monitor, opts); err != nil {
-
+							if option.Float {
+								opts := server.AnimationsOptions{
+									Margin:    option.FloatOptions.Margin,
+									Animation: option.FloatOptions.Animation,
+									Width:     option.FloatOptions.Width,
+									Height:    option.FloatOptions.Height,
+								}
+								if err := server.ResizeClient(client, opts.Width, opts.Height); err != nil {
+								}
+								if err := server.ToAnimation(client, monitor, opts); err != nil {
+								}
 							}
 
 							byName[name] = Scratchpad{

@@ -12,7 +12,8 @@ import (
 )
 
 type appArgs struct {
-	Config string
+	Config  string
+	Restart bool
 }
 
 func AddCommand(cmd *cobra.Command, config string) {
@@ -34,6 +35,10 @@ func AddCommand(cmd *cobra.Command, config string) {
 		&args.Config, "config", "c", config,
 		"config file (default ~/.config/hyprland/gophrland.yaml)",
 	)
+	fl.BoolVarP(
+		&args.Restart, "restart", "r", false,
+		"restart Gophrland (also delete /tmp/hypr/<HYPRLAND_SESSION>/.gophrland.yaml file",
+	)
 
 	cmd.AddCommand(daemon)
 }
@@ -49,6 +54,7 @@ func run(ctx context.Context, args appArgs) error {
 		return serverCmd.New(
 			serverCmd.WithLogger(logger),
 			serverCmd.WithConfigFilePath(args.Config),
+			serverCmd.WithRestart(args.Restart),
 		)
 	})
 

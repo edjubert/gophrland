@@ -1,7 +1,8 @@
 package cmd
 
-type BringFloatOptions struct {
-	Offset float64 `yaml:"offset,omitempty"`
+type FloatOptions struct {
+	Offset          float64 `yaml:"offset,omitempty"`
+	RandomizeCenter bool    `yaml:"randomize_center,omitempty"`
 }
 
 func LoadPlugin() {}
