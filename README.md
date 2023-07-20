@@ -23,6 +23,7 @@ plugins:
   - "scratchpads"
   - "expose"
   - "float"
+  - "monitors"
 
 options:
   float:
@@ -34,34 +35,38 @@ options:
   scratchpads:
     - term:
         command: "alacritty --class gophrland-alacritty"
-        animation: "fromTop"
         unfocus: "hide"
-        margin: 60
+        float: true
+        floatOpts:
+          animation: "fromTop"
+          margin: 60
 
     - volume:
         command: "alacritty --class pulsemixer-alacritty -e pulsemixer"
-        animation: "fromRight"
         unfocus: "hide"
-        margin: 50
+        float: true
+        floatOpts:
+          animation: "fromRight"
+          margin: 50
 
     - slack:
         command: "slack"
-        animation: "fromRight"
-        unfocus: "hide"
+        float: false
         class: "Slack"
-        margin: 60
 
     - whatsdesk:
         command: "whatsdesk"
-        animation: "fromBottom"
-        unfocus: "hide"
+        float: false
         class: "whatsdesk"
-        margin: 40
 
     - cava:
         command: "alacritty --class cava-alacritty -e cava"
-        animation: "fromBottom"
-        margin: 10
+        float: true
+        floatOpts:
+          animation: "fromBottom"
+          margin: 10
+          width: "100%"
+          height: "10%"
 ```
 
 ## Running
@@ -73,41 +78,103 @@ gophrland daemon --config path/to/your/gophrland.yaml
 ## Plugins
 ### Scratchpads
 ![scratchpads](https://github.com/edjubert/gophrland/assets/16240724/b2df1475-5528-40d4-bb54-6078f301dc9c)
-- Name: `scratchpads`
-- CLI:
-  - toggle: `gophrland scratchpads toggle [name]`
-- Options:
-  - command: the command to execute
-  - animation: the animation to run
-  - unfocus: [Unimplemented] the action when the window is unfocus 
-  - margin: the margin from the screen side
-  - class: [optional] if you want to get the window client by its class (works well for messaging apps such as Slack, Discord or Whatsdesk)
+- **Name**: `scratchpads`
+- **CLI**:
+  - **scratchpads**:
+    - **toggle**:
+      - **[name]**: `gophrland scratchpads toggle [name]` - Show/hide scratchpad
+- **Variables**:
+  - **Animation**:
+    - **Type**: `string`
+    - **Values**:
+      - fromTop
+      - fromBottom
+      - fromLeft
+      - fromRight
+  - **Unfocus**:
+    - **Type**: `string`
+    - **Values**:
+      - hide
+- **Options**:
+  - **command**: `string` the command to execute
+  - **float**: `bool` put the window in floating mode
+  - **floatOpts**:
+    - **animation**: `Animation` the animation to run (if `float: true`)
+    - **margin**:    `int` the margin from the screen side (if `float: true`)
+    - **width**:     `string` the client width, in `%` or `px` 
+    - **height**:    `string` the client height, in `%` or `px`
+  - **unfocus**: `Unfocus` the action when the window is unfocused
+  - **class**: *optional* `string` if you want to get the window client by its class (works well for messaging apps such as Slack, Discord or Whatsdesk)
+
+#### Example
+```yaml
+options:
+  scratchpads:
+    - term:
+        command: "alacritty --class gophrland-alacritty"
+        float: true
+        floatOpts:
+          animation: "fromTop"
+          margin: 60
+        unfocus: "hide"
+        
+    - volume:
+        command: "alacritty --class pulsemixer-alacritty -e pulsemixer"
+        float: false
+        floatOpts: # floatOpts won't have any impact as float is false
+          animation: "fromRight"
+          margin: 50
+
+    - slack:
+        command: "slack"
+        class: "Slack"
+        float: false
+```
 
 ### Expose
 ![expose](https://github.com/edjubert/gophrland/assets/16240724/6a37881f-2892-4636-99f6-1093af005275)
-- Name: `expose`
-- CLI:
-  - toggle: `gophrland expose toggle`
-  - show special workspace: `gophrland expose show`
-- Options:
-  - name: the special workspace name
+- **Name**: `expose`
+- **CLI**:
+  - **expose**:
+    - **toggle**: `gophrland expose toggle` - Move current window to special or current workspace
+    - **show**: `gophrland expose show` - Focus expose special workspace
+- **Options**:
+  - **name**: *optional* `string` the special workspace name
+
+#### Example
+```yaml
+options:
+  expose:
+    name: "my_awesome_special_workspace_name"
+```
 
 ### Float
-- Name: `float`
-- CLI:
-  - toggle: `gophrland float bring current`
-- Options:
-  - offset: percentage of window that have to be offscreen to be triggered
+![float](https://github.com/edjubert/gophrland/assets/16240724/0b490a24-fa25-420f-b812-c0c992d0d42e)
+- **Name**: `float`
+- **CLI**:
+  - **float**:
+    - **bring**:
+      - **current**: `gophrland float bring current` - Bring all offscreen floating windows to current workspace
+- **Options**:
+  - **offset**: percentage of window that have to be offscreen to be triggered
+
+#### Example
+```yaml
+options:
+  float:
+    offset: 0.1
+```
 
 ### Monitors
-- Name: `monitors`
-- CLI:
-  - focus: Focus next/prev monitor
-    - next: `gophrland float focus next`
-    - prev: `gophrland float focus prev`
-  - move: Move window to next/prev monitor
-    - next: `gophrland move focus next`
-    - prev: `gophrland move focus prev`
+- **Name**: `monitors`
+- **CLI**:
+  - **float**:
+    - **focus**:
+      - **next**: `gophrland float focus next` - Focus next monitor
+      - **prev**: `gophrland float focus prev` - Focus previous monitor
+    - **move**: 
+      - **next** : `gophrland move focus next` - Move window to next monitor
+      - **prev** : `gophrland move focus prev` - Move window to prev monitor
 
 ## Write a plugin
 Write a plugin is easy

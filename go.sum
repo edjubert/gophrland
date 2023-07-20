@@ -68,6 +68,8 @@ github.com/edjubert/hyprland-ipc-go v0.0.12 h1:upK8iGJEoe4u3Cya3b8h7/Ow0HMXs1GI+
 github.com/edjubert/hyprland-ipc-go v0.0.12/go.mod h1:rUOpZlaFG+Aoa8lYMcVmkgD2m92H/Ojfn+buCNgmZHU=
 github.com/edjubert/hyprland-ipc-go v0.0.13 h1:2p/ad8EeKAEzDJMdfKoHrwm8FJe99uxoYqTxvZ4CvoQ=
 github.com/edjubert/hyprland-ipc-go v0.0.13/go.mod h1:rUOpZlaFG+Aoa8lYMcVmkgD2m92H/Ojfn+buCNgmZHU=
+github.com/edjubert/hyprland-ipc-go v0.0.14 h1:7cmapOKUgORyVmNfQotU3ESctHYM1Ec22Id1oJdkUOw=
+github.com/edjubert/hyprland-ipc-go v0.0.14/go.mod h1:rUOpZlaFG+Aoa8lYMcVmkgD2m92H/Ojfn+buCNgmZHU=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=

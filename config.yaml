@@ -5,35 +5,32 @@ plugins:
   - "monitors"
 
 options:
-  bring_float:
+  float:
     offset: 0.01
 
   scratchpads:
     - term:
         command: "alacritty --class gophrland-alacritty"
-        animation: "fromTop"
+        floatOpts:
+          animation: "fromTop"
+          margin: 60
+        float: true
         unfocus: "hide"
-        margin: 60
 
     - volume:
         command: "alacritty --class pulsemixer-alacritty -e pulsemixer"
-        animation: "fromRight"
+        float: true
+        floatOpts:
+          animation: "fromRight"
+          margin: 50
         unfocus: "hide"
-        margin: 50
 
     - slack:
         command: "slack"
-        animation: "fromRight"
         class: "Slack"
-        margin: 60
+        float: false
 
     - whatsdesk:
         command: "whatsdesk"
-        animation: "fromBottom"
         class: "whatsdesk"
-        margin: 40
-
-    # - cava:
-    #     command: "alacritty --class cava-alacritty -e cava"
-    #     animation: "fromBottom"
-    #     margin: 10
+        float: false
