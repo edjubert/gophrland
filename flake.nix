@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "A set of tools to manage windows, workspaces, monitors and scratchpads on Hyprland";
 
   outputs = { self, nixpkgs }: {
 

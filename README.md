@@ -8,6 +8,14 @@ This is a rework of [pyprland](https://github.com/hyprland-community/pyprland)
 go install github.com/edjubert/gophrland@latest
 ```
 
+### Nix
+To install using the `flake.nix` file, just run
+```
+nix build .
+```
+
+The output result is located at `./result/bin/gophrland` which is a symlink to your generated `/nix/store/<hash>/bin/gophrland`
+
 ### From source
 ```bash
 git clone https://github.com/edjubert/gophrland
