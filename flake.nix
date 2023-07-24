@@ -12,8 +12,8 @@
         version = "0.0.3";
 
         src = fetchurl {
-          url = "https://github.com/edjubert/gophrland/releases/download/v0.0.3/gophrland-v0.0.3-linux-x86_64.tar.gz";
-          sha256 = "sha256-cNIloeBibs+XTFA46kYkkGfDwuykRmDDMVm1Nz5LvEU=";
+          url = "https://github.com/edjubert/gophrland/releases/download/v0.0.3.1/gophrland-v0.0.3.1-linux-x86_64.tar.gz";
+          sha256 = "sha256-V8U9pJF6tx5uxwCX1SBXBtYtS/4qJl+MxlMRZW9uaeM=";
         };
 
         sourceRoot = ".";
