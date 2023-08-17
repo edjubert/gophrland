@@ -12,8 +12,8 @@
       let
         pkgs = import nixpkgs { inherit system; };
       in {
-	# devShells.default = pkgs.callPackage ./shell.nix {};
-	packages.gophrland = pkgs.callPackage ./package.nix {};
+        devShells.default = pkgs.callPackage ./shell.nix {};
+        packages.default = pkgs.callPackage ./package.nix {};
       }
     );
 }
