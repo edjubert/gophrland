@@ -1,7 +1,7 @@
 { buildGoModule, lib, pkgs }:
 buildGoModule rec {
   name = "gophrlang-${version}";
-  version = "0.0.3";
+  version = "0.0.3.4";
 
   src = pkgs.fetchFromGitHub {
     owner = "edjubert";
