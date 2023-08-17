@@ -1,19 +1,19 @@
 { buildGoModule, lib, pkgs }:
 buildGoModule rec {
   name = "gophrlang-${version}";
-  version = "0.0.3.4";
+  version = "0.0.3.5";
 
   src = pkgs.fetchFromGitHub {
     owner = "edjubert";
     repo = "gophrland";
     rev = "v${version}";
-    hash = "sha256-4uqf+8E2Ut7RZf2s5qCJFqu0GgxRDK+TJOcDf91buCE=";
+    hash = "sha256-vkwgmKL7sgdvRwsmfF8myHDg+bDjPL1y9FxEvusWCuU=";
   };
 
   vendorHash = "sha256-+QaB3SpIowrucG0je4wK6hnzS2D5lZqmVJQyGcsCb04=";
 
   installPhase = ''
-    install -m 755 -D gophrland $out/bin/gophrland
+    install -m 755 -D gophrland-${version} $out/bin/gophrland
   '';
 
   meta = with lib; {
