@@ -13,7 +13,7 @@ buildGoModule rec {
   vendorHash = "sha256-+QaB3SpIowrucG0je4wK6hnzS2D5lZqmVJQyGcsCb04=";
 
   installPhase = ''
-    install -m 755 -D gophrland-${version} $out/bin/gophrland
+    install -m 755 -D gophrland $out/bin/gophrland
   '';
 
   meta = with lib; {
