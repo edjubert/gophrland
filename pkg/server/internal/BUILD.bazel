@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "internal",
+    srcs = [
+        "call_command.go",
+        "process_client.go",
+    ],
+    importpath = "github.com/edjubert/gophrland/pkg/server/internal",
+    visibility = ["//visibility:public"],
+    deps = [
+      "//plugins",
+      "//plugins/expose/server/cmd",
+      "//plugins/float/server/cmd",
+      "//plugins/monitors/server/cmd",
+      "//plugins/scratchpads/server/cmd",
+    ],
+)
+

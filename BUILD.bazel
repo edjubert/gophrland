@@ -1,0 +1,15 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+#
+# Gazelle rules
+#
+gazelle(name = "gazelle")
+
+gazelle(
+    name = "update-repos",
+    args = [
+        "-to_macro=repositories.bzl%go_repositories",
+        "-prune",
+    ],
+    command = "update-repos",
+)

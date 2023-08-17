@@ -1,10 +1,9 @@
 module github.com/edjubert/gophrland
 
-go 1.19
+go 1.20
 
 require (
-	github.com/edjubert/hyprland-ipc-go v0.0.20
-	github.com/mattn/go-isatty v0.0.19
+	github.com/edjubert/hyprland-ipc-go v0.0.25
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	golang.org/x/sync v0.3.0

@@ -3,7 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	IPC "github.com/edjubert/hyprland-ipc-go/ipc"
+
 	"github.com/edjubert/hyprland-ipc-go/hyprctl"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )

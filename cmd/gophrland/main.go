@@ -1,5 +1,5 @@
 // socket-server project main.go
-package gophrland
+package main
 
 import (
 	"context"
@@ -8,7 +8,15 @@ import (
 	"os"
 )
 
-func Run(ctx context.Context) error {
+func main() {
+	ctx := context.Background()
+
+	if err := run(ctx); err != nil {
+		panic(err)
+	}
+}
+
+func run(ctx context.Context) error {
 	_ = logging.New(os.Stdout)
 
 	return cmd.Execute()

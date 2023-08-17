@@ -270,7 +270,7 @@ package cmd
 
 import (
     "fmt"
-    "github.com/edjubert/hyprland-ipc-go"
+    "github.com/edjubert/hyprland-ipc-go/ipc"
     "github.com/spf13/cobra"
 )
 

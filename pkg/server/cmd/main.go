@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"github.com/edjubert/gophrland/pkg/logging"
 	server "github.com/edjubert/gophrland/pkg/server/internal"
-	IPC "github.com/edjubert/hyprland-ipc-go"
-
 	"github.com/edjubert/gophrland/pkg/server/pkg/config"
 	"github.com/edjubert/gophrland/plugins"
+	IPC "github.com/edjubert/hyprland-ipc-go/ipc"
 	"os"
 )
 

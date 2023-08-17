@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 	monitors "github.com/edjubert/gophrland/plugins/monitors/server/cmd"
-	IPC "github.com/edjubert/hyprland-ipc-go"
+	IPC "github.com/edjubert/hyprland-ipc-go/ipc"
 	"github.com/spf13/cobra"
 )
 
