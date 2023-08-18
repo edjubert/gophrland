@@ -33,7 +33,7 @@ func AddCommand(cmd *cobra.Command, config string) {
 
 	fl.StringVarP(
 		&args.Config, "config", "c", config,
-		"config file (default ~/.config/hyprland/gophrland.yaml)",
+		"config file (default ~/.config/gophrland/gophrland.yaml)",
 	)
 	fl.BoolVarP(
 		&args.Restart, "restart", "r", false,

@@ -17,7 +17,7 @@ buildBazelPackage {
 
   src = pkgs.nix-gitignore.gitignoreSource [] (lib.cleanSource ./.);
   fetchAttrs.sha256 = {
-    x86_64-linux = "sha256-sDJzJi1R7QzPRGew/bFrdYSOsnT6osii9QByk5MFbeA=";
+    x86_64-linux = "sha256-dSHLuoKHAu88UiyzVyXf6bZ/tYGy2OqvZ8KkeZUfzNg=";
     aarch64-linux = "";
   }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 }

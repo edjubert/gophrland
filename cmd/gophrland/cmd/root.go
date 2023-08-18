@@ -39,7 +39,7 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		viper.AddConfigPath(home + "/.config/hypr")
+		viper.AddConfigPath(home + "/.config/gophrland")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("gophrland")
 	}
