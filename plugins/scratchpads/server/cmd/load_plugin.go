@@ -18,8 +18,8 @@ type ScratchpadFloatOptions struct {
 
 type ScratchpadOptions struct {
 	Command      string                 `yaml:"command"`
-	Float        bool                   `yaml:"float"`
-	FloatOptions ScratchpadFloatOptions `yaml:"floatOpts"`
+	Float        bool                   `yaml:"float,omitempty"`
+	FloatOptions ScratchpadFloatOptions `yaml:"floatOpts,omitempty"`
 	Unfocus      string                 `yaml:"unfocus,omitempty"`
 	Class        string                 `yaml:"class,omitempty"`
 }
@@ -48,6 +48,9 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 					if field.Type.String() == "string" && field.Name == "Command" {
 						if option.Class == "" {
 							values := strings.Fields(value.String())
+							if len(values) == 0 {
+								return fmt.Errorf("[ERROR] - No values")
+							}
 							cmd := exec.Command(values[0], values[1:]...)
 							if err := cmd.Start(); err != nil {
 								return fmt.Errorf("[ERROR] - Could not start '%s' -> %w\n", field.Name, err)

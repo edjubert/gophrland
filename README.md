@@ -3,12 +3,56 @@ Gophrland is a set of tools to manage windows on Hyprland.
 This is a rework of [pyprland](https://github.com/hyprland-community/pyprland)
 
 ## Installation
-### From go cli
-```bash
-go install github.com/edjubert/gophrland@latest
+### Nix
+#### Home manager flake
+```nix
+{
+  inputs = {
+    nxipkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    gophrland = {
+      url = "github:edjubert/gophrland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+  
+  outputs = { nixpkgs, gophrland, ... } @ inputs:
+  let
+    system = "x86_64-linux";
+    pkgs = inputs.nixpkgs.legacyPackages.${system};
+  in {
+    # Don't forget to change `user` by your username
+    homeConfigurations."user" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      
+      modules = [
+        {
+          home.packages = [
+            gophrland.packages.${system}.default
+          ];
+        }
+      ];
+    };
+  };
+}
 ```
 
-### Nix
+### Local
+#### Bazel
+You can have needed dependencies (like gcc) with nix shell if you have direnv setted up
+```bash
+direnv allow
+```
+
+Then run
+```bash
+bazel build //cmd/gophrland
+```
+
+#### Nix Flake
 To install using the `flake.nix` file, just run
 ```
 nix build .
