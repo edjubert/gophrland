@@ -2,18 +2,26 @@
   description = "A set of tools to manage windows, workspaces, monitors and scratchpads on Hyprland";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
+    utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    gomod2nix = {
+      url = "github:nix-community/gomod2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
   };
 
-  outputs = { self, flake-utils, nixpkgs, ... }:
-    flake-utils.lib.eachDefaultSystem(
+  outputs = { self, utils, nixpkgs, gomod2nix, ... }:
+    utils.lib.eachDefaultSystem(
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ gomod2nix.overlays.default ];
+        };
       in {
-        devShells.default = pkgs.callPackage ./shell.nix {};
-        packages.default = pkgs.callPackage ./package.nix {};
+        devShells.default = import ./shell.nix { inherit pkgs; };
+        packages.default = pkgs.callPackage ./. {};
       }
     );
 }
