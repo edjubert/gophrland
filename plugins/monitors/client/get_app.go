@@ -21,7 +21,7 @@ func GetCommand(ccmd string, args string) func(cmd *cobra.Command, _ []string) e
 
 		acceptedCmds := []string{FocusCmd, MoveCmd}
 		if args != NextArg && args != PrevArg {
-			return fmt.Errorf("[ERROR] - could not recognize arg -> %s\n")
+			return fmt.Errorf("[ERROR] - could not recognize arg -> %s\n", args)
 		}
 		switch ccmd {
 		case FocusCmd, MoveCmd:
