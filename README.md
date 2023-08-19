@@ -40,21 +40,19 @@ This is a rework of [pyprland](https://github.com/hyprland-community/pyprland)
 }
 ```
 
-### Local
-#### Bazel
+#### Nix Flake
 You can have needed dependencies (like gcc) with nix shell if you have direnv setted up
 ```bash
 direnv allow
 ```
 
-Then run
+If you updated dependencies, you must update the `gomod2nix.toml` file by running
 ```bash
-bazel build //cmd/gophrland
+gomod2nix
 ```
 
-#### Nix Flake
 To install using the `flake.nix` file, just run
-```
+```bash
 nix build .
 ```
 
@@ -65,7 +63,6 @@ The output result is located at `./result/bin/gophrland` which is a symlink to y
 git clone https://github.com/edjubert/gophrland
 cd gophrland
 go build -o gophrland ./cmd/gophrland
-mv gophrland ~/.local/bin/gophrland
 ```
 
 ## Configuration
