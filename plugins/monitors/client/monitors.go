@@ -52,6 +52,27 @@ func getMonitorsMoveCommand() *cobra.Command {
 	return cmd
 }
 
+func focusNextWorkspace() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   NextArg,
+		Short: "Focus the next workspace on monitor",
+		Long:  "Focus the next workspace on monitor",
+	}
+
+	return cmd
+}
+func focusWorkspace() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:       FocusCmd,
+		Short:     "Focus the desired workspace",
+		Long:      "Focus the workspace depending on the monitor focused",
+		ValidArgs: []string{NextArg, PrevArg},
+	}
+
+	cmd.AddCommand()
+	return cmd
+}
+
 func Monitors() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:       "monitors",

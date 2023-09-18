@@ -34,7 +34,7 @@ func ApplyConfig(config Config) {
 		case float.Name:
 			float.LoadPlugin()
 		case monitors.Name:
-			monitors.LoadPlugin()
+			monitors.LoadPlugin(config.Options.Monitors)
 		default:
 			fmt.Printf("[WARN] - plugin '%s' is not implemented yet\n", plugin)
 		}

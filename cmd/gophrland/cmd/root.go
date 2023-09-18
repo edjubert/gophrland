@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/edjubert/gophrland/cmd/gophrland/cmd/server"
-	client "github.com/edjubert/gophrland/plugins"
+	"github.com/edjubert/gophrland/plugins"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -28,7 +28,7 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	client.AddCommand(rootCmd)
+	plugins.AddCommand(rootCmd)
 	server.AddCommand(rootCmd, cfgFile)
 }
 
