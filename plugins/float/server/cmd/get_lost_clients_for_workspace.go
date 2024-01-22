@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
 func getLostClientsForWorkspace(workspace types.HyprlandWorkspace, monitor types.HyprlandMonitor, opts FloatOptions) ([]LostClient, error) {
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	floatingClients, err := getter.WorkspaceFloatingClients(workspace)
 	if err != nil {
 		return nil, err

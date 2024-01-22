@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 	"github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	IPC "github.com/edjubert/hyprland-ipc-go/ipc"
 
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
@@ -19,7 +19,7 @@ const (
 )
 
 func getAllScratchpadsAndClients(options []map[string]ScratchpadOptions) ([]ScratchpadsAndClients, error) {
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	clients, err := getter.Clients()
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func hideOnUnfocused(clientAddresses []string, options []map[string]ScratchpadOp
 		return err
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	currentWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err
@@ -113,7 +113,7 @@ func showOnUrgent(clientAddresses []string, options []map[string]ScratchpadOptio
 		return err
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	currentWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err

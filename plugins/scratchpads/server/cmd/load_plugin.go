@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	server "github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"os/exec"
 	"reflect"
 	"strings"
@@ -58,7 +58,7 @@ func LoadPlugin(options []map[string]ScratchpadOptions) error {
 
 							pid := cmd.Process.Pid
 
-							getter := hyprctl.Get{}
+							getter := get.Get{}
 							clients, err := getter.Clients()
 							if err != nil {
 							}
