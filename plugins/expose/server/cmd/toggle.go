@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 )
 
 func toggle(options ExposeOptions) error {
@@ -10,19 +11,19 @@ func toggle(options ExposeOptions) error {
 		name = options.Name
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	client, err := getter.ActiveClient()
 	if err != nil {
 		return err
 	}
 
-	dispatch := hyprctl.Dispatch{}
+	move := dispatch.Move{}
 	if client.Workspace.Id < 0 {
-		if err := dispatch.Move.ClientToCurrent(client.Address); err != nil {
+		if err := move.ClientToCurrent(client.Address); err != nil {
 			return err
 		}
 	} else {
-		if err := dispatch.Move.ToSpecialNamed(name, client.Address); err != nil {
+		if err := move.ToSpecialNamed(name, client.Address); err != nil {
 			return err
 		}
 	}

@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
@@ -43,7 +44,7 @@ func focus(args []string, options MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
@@ -70,6 +71,6 @@ func focus(args []string, options MonitorsOptions) error {
 		nextMonitor = getPrevMonitor(activeMonitorIndex, monitors)
 	}
 
-	dispatch := hyprctl.Dispatch{}
-	return dispatch.Focus.Monitor(nextMonitor)
+	focus := dispatch.Focus{}
+	return focus.Monitor(nextMonitor)
 }

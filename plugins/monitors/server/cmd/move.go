@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
@@ -11,7 +12,7 @@ func move(args []string, opts MonitorsOptions) error {
 		return fmt.Errorf("[ERROR] - too many arguments\n")
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
@@ -44,6 +45,6 @@ func move(args []string, opts MonitorsOptions) error {
 		fmt.Println("next monitor", nextMonitor)
 	}
 
-	dispatch := hyprctl.Dispatch{}
-	return dispatch.Move.ToWorkspaceName(nextMonitor.ActiveWorkspace.Name, activeClient.Address)
+	move := dispatch.Move{}
+	return move.ToWorkspaceName(nextMonitor.ActiveWorkspace.Name, activeClient.Address)
 }

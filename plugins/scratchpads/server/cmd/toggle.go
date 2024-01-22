@@ -3,7 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/edjubert/gophrland/plugins/scratchpads/server/pkg"
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 	"time"
 )
@@ -24,7 +25,7 @@ func getOption(scratchpadName string, options []map[string]ScratchpadOptions) Sc
 
 func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error {
 	fmt.Println("[INFO] Updating scratchpad")
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	clients, err := getter.Clients()
 	if err != nil {
 		return err
@@ -35,9 +36,9 @@ func (scratchpad *Scratchpad) updateScratchpad(options ScratchpadOptions) error 
 		Options: options,
 	}
 
-	dispatch := hyprctl.Dispatch{}
+	toggle := dispatch.Toggle{}
 	if !options.Float && client.Floating {
-		if err := dispatch.Toggle.Floating(client.Address); err != nil {
+		if err := toggle.Floating(client.Address); err != nil {
 			return err
 		}
 	}
@@ -66,7 +67,7 @@ func toggle(args []string, options []map[string]ScratchpadOptions) error {
 		}
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	monitors, err := getter.Monitors("-j")
 	if err != nil {
 		return err
@@ -119,12 +120,12 @@ func toggle(args []string, options []map[string]ScratchpadOptions) error {
 }
 
 func showClient(client types.HyprlandClient, monitor types.HyprlandMonitor) error {
-	dispatch := hyprctl.Dispatch{}
-	return dispatch.Move.ToWorkspaceName(monitor.ActiveWorkspace.Name, client.Address)
+	move := dispatch.Move{}
+	return move.ToWorkspaceName(monitor.ActiveWorkspace.Name, client.Address)
 }
 func hideClient(client types.HyprlandClient) error {
-	dispatch := hyprctl.Dispatch{}
-	return dispatch.Move.ToSpecialNamed(SCRATCHPADS_SPECIAL_WORKSPACE, client.Address)
+	move := dispatch.Move{}
+	return move.ToSpecialNamed(SCRATCHPADS_SPECIAL_WORKSPACE, client.Address)
 }
 
 func showFloatingClient(client types.HyprlandClient, monitor types.HyprlandMonitor, animationOptions pkg.AnimationsOptions) error {
@@ -132,8 +133,8 @@ func showFloatingClient(client types.HyprlandClient, monitor types.HyprlandMonit
 		return err
 	}
 
-	dispatch := hyprctl.Dispatch{}
-	if err := dispatch.Move.ToWorkspaceName(monitor.ActiveWorkspace.Name, client.Address); err != nil {
+	move := dispatch.Move{}
+	if err := move.ToWorkspaceName(monitor.ActiveWorkspace.Name, client.Address); err != nil {
 		return err
 	}
 
@@ -146,7 +147,7 @@ func hideFloatingClient(client types.HyprlandClient, monitor types.HyprlandMonit
 		return err
 	}
 
-	dispatch := hyprctl.Dispatch{}
+	move := dispatch.Move{}
 	time.Sleep(time.Millisecond * 200)
-	return dispatch.Move.ToSpecialNamed(SCRATCHPADS_SPECIAL_WORKSPACE, client.Address)
+	return move.ToSpecialNamed(SCRATCHPADS_SPECIAL_WORKSPACE, client.Address)
 }

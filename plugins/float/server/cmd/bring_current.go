@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 )
 
@@ -13,7 +14,7 @@ type LostClient struct {
 }
 
 func bringCurrent(opts FloatOptions) error {
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	activeWorkspace, err := getter.ActiveWorkspace()
 	if err != nil {
 		return err
@@ -33,9 +34,9 @@ func bringCurrent(opts FloatOptions) error {
 		return err
 	}
 
-	dispatch := hyprctl.Dispatch{}
+	move := dispatch.Move{}
 	for _, client := range lostClients {
-		if err := dispatch.Move.CenterFloatingClient(client.Client, monitor, opts.RandomizeCenter); err != nil {
+		if err := move.CenterFloatingClient(client.Client, monitor, opts.RandomizeCenter); err != nil {
 			return err
 		}
 	}

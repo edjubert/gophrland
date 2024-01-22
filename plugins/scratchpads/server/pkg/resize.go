@@ -2,7 +2,8 @@ package pkg
 
 import (
 	"fmt"
-	"github.com/edjubert/hyprland-ipc-go/hyprctl"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/dispatch"
+	"github.com/edjubert/hyprland-ipc-go/hyprctl/get"
 	"github.com/edjubert/hyprland-ipc-go/types"
 	"strconv"
 	"strings"
@@ -35,7 +36,7 @@ func ResizeClient(client types.HyprlandClient, width, height string) error {
 		return fmt.Errorf("[ERROR] - Invalid size param")
 	}
 
-	getter := hyprctl.Get{}
+	getter := get.Get{}
 	monitor, err := getter.MonitorByID(client.Monitor)
 	if err != nil {
 		return err
@@ -65,6 +66,6 @@ func ResizeClient(client types.HyprlandClient, width, height string) error {
 		}
 	}
 
-	dispatch := hyprctl.Dispatch{}
-	return dispatch.ResizeWindowExactPixel(client, intWidth, intHeight)
+	resize := dispatch.Resize{}
+	return resize.WindowExactPixel(client, intWidth, intHeight)
 }
