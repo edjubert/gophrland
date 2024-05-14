@@ -2,8 +2,8 @@ schema = 3
 
 [mod]
   [mod."github.com/edjubert/hyprland-ipc-go"]
-    version = "v0.1.0"
-    hash = "sha256-lMG0ILf71ld47bojviAIenmwdKINkzHliNEpFM1xMPE="
+    version = "v0.1.4"
+    hash = "sha256-jSEwAGJSBEnPqkioCurYaun6kWyabBmb7njpcolgJq8="
   [mod."github.com/fsnotify/fsnotify"]
     version = "v1.6.0"
     hash = "sha256-DQesOCweQPEwmAn6s7DCP/Dwy8IypC+osbpfsvpkdP0="

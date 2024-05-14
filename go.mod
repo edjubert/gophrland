@@ -3,7 +3,7 @@ module github.com/edjubert/gophrland
 go 1.20
 
 require (
-	github.com/edjubert/hyprland-ipc-go v0.1.0
+	github.com/edjubert/hyprland-ipc-go v0.1.4
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	golang.org/x/sync v0.3.0
